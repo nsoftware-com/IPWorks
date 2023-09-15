@@ -5,14 +5,14 @@ The provided sample projects offer a concise yet effective demonstration of the 
 IPWorks 2022 libraries for the corresponding edition are required to run these samples.  Free download from: [https://www.nsoftware.com/ipworks](https://www.nsoftware.com/ipworks)
 
 ## Reference Documentation
-[Java](https://cdn.nsoftware.com/help/IPH/java/)
-[Javascript](https://cdn.nsoftware.com/help/IPH/js/)
-[.NET](https://cdn.nsoftware.com/help/IPH/cs/)
-[Python](https://cdn.nsoftware.com/help/IPH/py/)
-[PHP](https://cdn.nsoftware.com/help/IPH/php/)
-[C++](https://cdn.nsoftware.com/help/IPH/cpp/)
-[macOS](https://cdn.nsoftware.com/help/IPH/mac/)
-[iOS](https://cdn.nsoftware.com/help/IPH/mac/)
+* [Java](https://cdn.nsoftware.com/help/IPH/java/)
+* [Javascript](https://cdn.nsoftware.com/help/IPH/js/)
+* [.NET](https://cdn.nsoftware.com/help/IPH/cs/)
+* [Python](https://cdn.nsoftware.com/help/IPH/py/)
+* [PHP](https://cdn.nsoftware.com/help/IPH/php/)
+* [C++](https://cdn.nsoftware.com/help/IPH/cpp/)
+* [macOS](https://cdn.nsoftware.com/help/IPH/mac/)
+* [iOS](https://cdn.nsoftware.com/help/IPH/mac/)
 
 ## Sample Projects
 | Sample Project | Description |
