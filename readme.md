@@ -6,11 +6,12 @@ IPWorks 2022 libraries for the corresponding edition are required to run these s
 
 ## Reference Documentation
 * [Java Edition](https://cdn.nsoftware.com/help/IPH/java/)
-* [Javascript Edition](https://cdn.nsoftware.com/help/IPH/js/)
 * [.NET Edition](https://cdn.nsoftware.com/help/IPH/cs/)
+* [JavaScript Edition](https://cdn.nsoftware.com/help/IPH/js/)
 * [Python Edition](https://cdn.nsoftware.com/help/IPH/py/)
 * [PHP Edition](https://cdn.nsoftware.com/help/IPH/php/)
 * [C++ Edition](https://cdn.nsoftware.com/help/IPH/cpp/)
+* [Delphi Edition](https://cdn.nsoftware.com/help/IPH/dlp/)
 * [macOS Edition](https://cdn.nsoftware.com/help/IPH/mac/)
 * [iOS Edition](https://cdn.nsoftware.com/help/IPH/mac/)
 
@@ -26,6 +27,8 @@ IPWorks 2022 libraries for the corresponding edition are required to run these s
 | [GET URL](./IPWorks%20Samples/GET%20URL) | Shows how to download the content of a URL from a Web server. |
 | [HTML Mailer](./IPWorks%20Samples/HTML%20Mailer) | Shows how to use HTMLMailer to send HTML Mail with inline images. |
 | [IMAP Email Client](./IPWorks%20Samples/IMAP%20Email%20Client) | Shows how to use the IMAP component to access IMAP servers (e.g. MS Exchange). |
+| [IPConfig](./IPWorks%20Samples/IPConfig) | Shows how to use the IPInfo component to obtain adapter information and perform DHCP Release/Renew operations. |
+| [IPMonitor](./IPWorks%20Samples/IPMonitor) | Shows how to use the IPMonitor component to see all data received by a network interface. |
 | [Internet Paging](./IPWorks%20Samples/Internet%20Paging) | A simple SNPP client showing how to send a message to an SNPP server. |
 | [JSON Parser](./IPWorks%20Samples/JSON%20Parser) | Uses the JSON object to parse JSON from a URL, file, or string input sources. |
 | [LDAP Search](./IPWorks%20Samples/LDAP%20Search) | Shows how to contact an LDAP server and lookup a name. |
@@ -37,9 +40,11 @@ IPWorks 2022 libraries for the corresponding edition are required to run these s
 | [OData People Search](./IPWorks%20Samples/OData%20People%20Search) | Shows how to use the OData component to query a test OData V4 service. |
 | [POP Email Client](./IPWorks%20Samples/POP%20Email%20Client) | A simple email client. It shows how to use the SMTP and POP components access POP and SMTP mail servers. |
 | [Ping](./IPWorks%20Samples/Ping) | Shows how to use the Ping component to check whether a host is accessible. |
+| [Proxy Firewall Demo](./IPWorks%20Samples/Proxy%20Firewall%20Demo) | Shows how to use the Firewall property to traverse HTTP Tunneling and Socks proxies. |
 | [REST OpenWeatherAPI](./IPWorks%20Samples/REST%20OpenWeatherAPI) | Shows how to use the REST object to send and retrieve information from RESTful web services. |
 | [RSS Aggregator](./IPWorks%20Samples/RSS%20Aggregator) | Shows how to use the RSS component to read RSS feeds. |
 | [Remote Execution](./IPWorks%20Samples/Remote%20Execution) | Shows how to use the Rexec component for remotely executing programs on a unix machine that supports rexec. |
+| [Remote Shell](./IPWorks%20Samples/Remote%20Shell) | Shows how to use the Rshell component for remotely executing programs on a unix machine that supports rshell. |
 | [Resolve IP](./IPWorks%20Samples/Resolve%20IP) | Shows how to use the IPInfo component to resolve hostnames. |
 | [S3](./IPWorks%20Samples/S3) | Uses the S3 component to allow you to interact with Amazon S3 and other S3-compatible services. |
 | [SMPP Text Message](./IPWorks%20Samples/SMPP%20Text%20Message) | A short demo showing how to use the SMPP component to send text messages to an SMS-compliant device (e.g. cell phone). |
@@ -56,9 +61,11 @@ IPWorks 2022 libraries for the corresponding edition are required to run these s
 | [UDP Echo Client](./IPWorks%20Samples/UDP%20Echo%20Client) | Sends a broadcast message on the ECHO port to all the machines in a LAN and measures the time it takes them to respond. |
 | [UDP Time Client](./IPWorks%20Samples/UDP%20Time%20Client) | Sends a broadcast message on the TIME port to all the machines in a LAN. |
 | [WebDAV Client](./IPWorks%20Samples/WebDAV%20Client) | Allows you to copy files back and forth between a DAV server and localhost. |
+| [WebForm](./IPWorks%20Samples/WebForm) | Demonstrates posting of data on a Web form, much like you do with HTML forms. |
 | [WebSocket Client](./IPWorks%20Samples/WebSocket%20Client) | Shows how to use the WebSocketClient component to send and receive data. |
 | [WebSocket Server](./IPWorks%20Samples/WebSocket%20Server) | Uses the WebSocketServer component to create a simple WebSocket server. |
 | [Whois Client](./IPWorks%20Samples/Whois%20Client) | Demonstrates the use of the Whois component. |
+| [XML Parser](./IPWorks%20Samples/XML%20Parser) | Uses the XML object to parse XML from http, file, or string input sources. |
 | [XMPP](./IPWorks%20Samples/XMPP) | Uses the XMPP component to implement a simple Jabber instant messaging demo. |
 
 ## Support

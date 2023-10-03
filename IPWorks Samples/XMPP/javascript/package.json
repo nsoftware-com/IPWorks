@@ -8,7 +8,7 @@
   "main": "jabber.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworks": "^22.0.8658"
+    "ipworks": "^22.0.8676"
   },
   "scripts": {
     "jabber": "node jabber.js"

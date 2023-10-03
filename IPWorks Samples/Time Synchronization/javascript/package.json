@@ -8,7 +8,7 @@
   "main": "netclock.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworks": "^22.0.8658"
+    "ipworks": "^22.0.8676"
   },
   "scripts": {
     "netclock": "node netclock.js"

@@ -8,7 +8,7 @@
   "main": "webdav.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworks": "^22.0.8658"
+    "ipworks": "^22.0.8676"
   },
   "scripts": {
     "webdav": "node webdav.js"
