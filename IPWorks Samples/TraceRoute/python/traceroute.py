@@ -18,6 +18,14 @@ from ipworks import *
 
 input = sys.hexversion<0x03000000 and raw_input or input
 
+def ensureArg(args, prompt, index):
+  if len(args) <= index:
+    while len(args) <= index:
+      args.append(None)
+    args[index] = input(prompt)
+  elif args[index] == None:
+    args[index] = input(prompt)
+
 def fireHop(e):
   print((str(e.hop_number) + ")").ljust(5) + e.host_address.ljust(20) + str(e.duration))
   #If a hop times out the e.Duration of the fireHop event will be -1

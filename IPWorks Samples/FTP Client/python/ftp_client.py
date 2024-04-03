@@ -18,6 +18,13 @@ from ipworks import *
 
 input = sys.hexversion<0x03000000 and raw_input or input
 
+def ensureArg(args, prompt, index):
+  if len(args) <= index:
+    while len(args) <= index:
+      args.append(None)
+    args[index] = input(prompt)
+  elif args[index] == None:
+    args[index] = input(prompt)
 
 verbose = 1
 
@@ -52,12 +59,6 @@ def logon():
   pwd = input("Password: ")
   ftp.set_password(pwd)
   ftp.logon()
-
-def ensureArg(argument, prompt, index):
-  if len(argument) <= index:
-    while len(argument) <= index:
-      argument.append(None)
-    argument[index] = input(prompt);
   
 def printMenu():
   print("Available Commands:\n?        bye     help     put     rmdir\n"

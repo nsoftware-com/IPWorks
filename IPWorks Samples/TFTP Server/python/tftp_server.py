@@ -18,6 +18,14 @@ from ipworks import *
 
 input = sys.hexversion<0x03000000 and raw_input or input
 
+def ensureArg(args, prompt, index):
+  if len(args) <= index:
+    while len(args) <= index:
+      args.append(None)
+    args[index] = input(prompt)
+  elif args[index] == None:
+    args[index] = input(prompt)
+
 print("********************************************************************************\n")
 print("* This demo shows how to set up a TFTP server using the TFTPServer component.  *\n")
 print("********************************************************************************\n")
