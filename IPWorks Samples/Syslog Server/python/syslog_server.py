@@ -18,14 +18,6 @@ from ipworks import *
 
 input = sys.hexversion<0x03000000 and raw_input or input
 
-def ensureArg(args, prompt, index):
-  if len(args) <= index:
-    while len(args) <= index:
-      args.append(None)
-    args[index] = input(prompt)
-  elif args[index] == None:
-    args[index] = input(prompt)
-
 def firePacketIn(e):
   print("Host: %s\nFacility: %s\nSeverity: %s\nTime: %s\nMessage: %s\n\n"%(e.hostname,e.facility,e.severity, e.timestamp, e.message))
 

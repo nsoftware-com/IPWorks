@@ -18,13 +18,6 @@ from ipworks import *
 
 input = sys.hexversion<0x03000000 and raw_input or input
 
-def ensureArg(args, prompt, index):
-  if len(args) <= index:
-    while len(args) <= index:
-      args.append(None)
-    args[index] = input(prompt)
-  elif args[index] == None:
-    args[index] = input(prompt)
 
 def fireSSLServerAuthentication(e):
   if e.accept: return
@@ -36,6 +29,12 @@ def fireSSLServerAuthentication(e):
 
 def fireTransfer(e): print(e.text)
 def fireError(e): print("Error: %s\n"%e.description)
+
+def ensureArg(argument, prompt, index):
+  if len(argument) <= index:
+    while len(argument) <= index:
+      argument.append(None)
+    argument[index] = input(prompt)
 
 http = HTTP()
 

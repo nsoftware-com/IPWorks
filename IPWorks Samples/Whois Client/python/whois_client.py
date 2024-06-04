@@ -18,14 +18,6 @@ from ipworks import *
 
 input = sys.hexversion<0x03000000 and raw_input or input
 
-def ensureArg(args, prompt, index):
-  if len(args) <= index:
-    while len(args) <= index:
-      args.append(None)
-    args[index] = input(prompt)
-  elif args[index] == None:
-    args[index] = input(prompt)
-
 whois = Whois()
 domain=input("Enter a Domain (microsoft.com): ")
 if domain == "": domain = "microsoft.com"
