@@ -10,13 +10,11 @@ object FormEchoclient: TFormEchoclient
   Font.Height = -14
   Font.Name = 'System'
   Font.Style = []
-  OldCreateOrder = True
   OnClose = FormClose
   OnDestroy = FormDestroy
   DesignSize = (
     425
     360)
-  PixelsPerInch = 96
   TextHeight = 16
   object Label2: TLabel
     Left = 8
@@ -58,7 +56,7 @@ object FormEchoclient: TFormEchoclient
     Font.Style = []
     ItemHeight = 13
     ParentFont = False
-    TabOrder = 1
+    TabOrder = 8
     OnMouseDown = lTrackMouseDown
   end
   object Panel1: TPanel
@@ -114,12 +112,13 @@ object FormEchoclient: TFormEchoclient
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 2
+    TabOrder = 7
     object ListStatus: TListBox
       Left = 10
       Top = 16
       Width = 151
       Height = 89
+      TabStop = False
       BorderStyle = bsNone
       Color = clBtnFace
       ItemHeight = 13
@@ -139,7 +138,7 @@ object FormEchoclient: TFormEchoclient
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 6
     OnClick = bEchoClick
   end
   object tEcho: TEdit
@@ -153,7 +152,7 @@ object FormEchoclient: TFormEchoclient
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 5
     Text = 'Hi There :)'
     OnKeyPress = tEchoKeyPress
   end
@@ -169,7 +168,7 @@ object FormEchoclient: TFormEchoclient
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 5
+    TabOrder = 3
     OnClick = bConnectClick
   end
   object Disconnect: TButton
@@ -184,7 +183,7 @@ object FormEchoclient: TFormEchoclient
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 4
     OnClick = DisconnectClick
   end
   object EditPort: TEdit
@@ -198,7 +197,7 @@ object FormEchoclient: TFormEchoclient
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 2
     Text = '777'
     OnKeyPress = tHostKeyPress
   end
@@ -213,12 +212,13 @@ object FormEchoclient: TFormEchoclient
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 1
     Text = 'Localhost'
     OnKeyPress = tHostKeyPress
   end
   object TCPClient1: TipwTCPClient
     FirewallPort = 80
+    SSLAcceptServerCertStore = 'MY'
     SSLCertStore = 'MY'
     OnConnected = TCPClient1Connected
     OnDataIn = TCPClient1DataIn

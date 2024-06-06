@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 JavaScript Edition - Sample Project
+ * IPWorks 2024 JavaScript Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -55,7 +55,7 @@ async function main() {
       tcpserver.sendText(e.connectionId, e.text);
     })
 
-  tcpserver.setLocalPort(argv[2]);
+  tcpserver.setLocalPort(parseInt(argv[2]));
   await tcpserver.startListening()
 
   console.log("Started Listening.");

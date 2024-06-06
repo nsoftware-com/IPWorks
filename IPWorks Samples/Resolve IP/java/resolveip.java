@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -20,7 +20,7 @@ public class resolveip extends ConsoleDemo {
 	private static boolean isHostAddr = true;
 	private static boolean eventProcessed = false;
 
-	private static Ipinfo ipinfo1 = null;
+	private static IPInfo ipinfo1 = null;
 
 	public static void main(String[] args) {
 		
@@ -33,11 +33,11 @@ public class resolveip extends ConsoleDemo {
 			System.out.println("\r\nExample: resolveip n google.com");
 			
 		} else {
-			ipinfo1 = new Ipinfo();
+			ipinfo1 = new IPInfo();
 			try {
-				ipinfo1.addIpinfoEventListener(new DefaultIpinfoEventListener() {
+				ipinfo1.addIPInfoEventListener(new DefaultIPInfoEventListener() {
 					
-					public void requestComplete(IpinfoRequestCompleteEvent e) {
+					public void requestComplete(IPInfoRequestCompleteEvent e) {
 						if (e.statusCode != 0) {
 							System.out.println("Request #" + e.requestId + " failed: " + e.description);
 						} else if (isHostAddr) {
@@ -97,15 +97,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

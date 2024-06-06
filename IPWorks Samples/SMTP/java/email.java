@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -30,7 +30,7 @@ public class email extends ConsoleDemo {
 			System.out.println("\r\nExample: email -c cc@mail.local -s test -m \"test message\" mail.local sender@mail.com recipient@mail.local");
 		} else {
 			try {
-				Smtp smtp1 = new Smtp();
+				SMTP smtp1 = new SMTP();
 				System.out.println("***************************************************************************************************");
 				System.out.println("* This demo shows how to use Email component to send an email message. By default, the connection *");
 				System.out.println("* will be attempted in plaintext. If SSL is desired, simply set SSLStartMode.                     *");
@@ -47,8 +47,8 @@ public class email extends ConsoleDemo {
 					}
 				}
 
-				smtp1.addSmtpEventListener(new DefaultSmtpEventListener() {
-					public void SSLServerAuthentication(SmtpSSLServerAuthenticationEvent arg0) {
+				smtp1.addSMTPEventListener(new DefaultSMTPEventListener() {
+					public void SSLServerAuthentication(SMTPSSLServerAuthenticationEvent arg0) {
 						arg0.accept = true; // this will trust all certificates and it is not recommended for production use
 					}
 				});
@@ -91,15 +91,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

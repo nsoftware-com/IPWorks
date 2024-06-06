@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -10,14 +10,6 @@
  * This code is subject to the terms and conditions specified in the 
  * corresponding product license agreement which outlines the authorized 
  * usage and restrictions.
- *)
-(*
- * IPWorks 2022 Delphi Edition - Demo Application
- * Copyright (c) 2022 /n software inc. - All rights reserved. - www.nsoftware.com
- *)
-(*
- * IPWorks 2022 Delphi Edition - Demo Application
- * Copyright (c) 2022 /n software inc. - All rights reserved. - www.nsoftware.com
  *)
 unit restf;
 

@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -30,11 +30,13 @@ type
     btnCelsius: TButton;
     Label3: TLabel;
     txtCelsius: TEdit;
-    procedure SOAP1SSLServerAuthentication(Sender: TObject; CertEncoded: string; CertEncodedB: TArray<System.Byte>;
-      const CertSubject, CertIssuer, Status: string; var Accept: Boolean);
+   
     procedure btnFahrenheitClick(Sender: TObject);
     procedure btnCelsiusClick(Sender: TObject);
     procedure InitialSetup();
+    procedure SOAP1SSLServerAuthentication(Sender: TObject;
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
   private
     { Private declarations }
   public
@@ -55,6 +57,13 @@ begin
   SOAP1.Config('MethodNamespacePrefix=');
   SOAP1.URL := 'https://www.w3schools.com/xml/tempconvert.asmx';
   SOAP1.MethodURI := 'https://www.w3schools.com/xml/';
+end;
+
+procedure TFormSoap.SOAP1SSLServerAuthentication(Sender: TObject;
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
+begin
+Accept := true;
 end;
 
 procedure TFormSoap.btnCelsiusClick(Sender: TObject);
@@ -104,13 +113,6 @@ begin
   SOAP1.XPath :=
     '/Envelope/Body/CelsiusToFahrenheitResponse/CelsiusToFahrenheitResult';
   txtFahrenheit.Text := SOAP1.XText;
-end;
-
-procedure TFormSoap.SOAP1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
-begin
-  Accept := true;
 end;
 
 end.

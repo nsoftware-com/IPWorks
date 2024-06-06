@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -20,7 +20,7 @@ public class htmlmailer extends ConsoleDemo {
 	
 	public static void main(String[] args) {
 		
-		Htmlmailer htmlmailer = new Htmlmailer();
+		HTMLMailer htmlmailer = new HTMLMailer();
     
 		if(args.length<3) {
 		
@@ -38,9 +38,9 @@ public class htmlmailer extends ConsoleDemo {
 		
 			try {
 			
-				htmlmailer.addHtmlmailerEventListener(new DefaultHtmlmailerEventListener(){
+				htmlmailer.addHTMLMailerEventListener(new DefaultHTMLMailerEventListener(){
 					
-					public void SSLServerAuthentication(HtmlmailerSSLServerAuthenticationEvent arg0) {
+					public void SSLServerAuthentication(HTMLMailerSSLServerAuthenticationEvent arg0) {
 						arg0.accept = true; //this will trust all certificates and it is not recommended for production use
 					}			    	  			    	 																					    				    				    			      				      			      					      					      					      	            		            	
 		        });
@@ -93,15 +93,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

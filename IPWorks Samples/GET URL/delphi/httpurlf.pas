@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -11,6 +11,7 @@
  * corresponding product license agreement which outlines the authorized 
  * usage and restrictions.
  *)
+
 unit httpurlf;
 
 interface
@@ -41,12 +42,13 @@ type
     procedure HTTP1Header(Sender: TObject; const Field, Value: String);
     procedure Button2Click(Sender: TObject);
     procedure HTTP1EndTransfer(Sender: TObject; Direction: Integer);
-    procedure HTTP1StartTransfer(Sender: TObject; Direction: Integer);
-    procedure HTTP1SSLServerAuthentication(Sender: TObject; CertEncoded: string; CertEncodedB: TArray<System.Byte>;
-      const CertSubject, CertIssuer, Status: string; var Accept: Boolean);
+    procedure HTTP1StartTransfer(Sender: TObject; Direction: Integer);   
+    procedure HTTP1SSLServerAuthentication(Sender: TObject;
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
     procedure HTTP1Transfer(Sender: TObject; Direction: Integer;
-      BytesTransferred: Int64; PercentDone: Integer; Text: string;
-      TextB: TArray<System.Byte>);
+      BytesTransferred: Int64; PercentDone: Integer; const Text: string;
+      const TextB: TBytes);
   private
     { Private declarations }
   public
@@ -98,9 +100,10 @@ begin
     Panel1.Caption := 'T R A N S F E R R E D';
 end;
 
+
 procedure TFormHttpurl.HTTP1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;
@@ -111,14 +114,16 @@ begin
 end;
 
 procedure TFormHttpurl.HTTP1Transfer(Sender: TObject; Direction: Integer;
-  BytesTransferred: Int64; PercentDone: Integer; Text: string;
-  TextB: TArray<System.Byte>);
+  BytesTransferred: Int64; PercentDone: Integer; const Text: string;
+  const TextB: TBytes);
 begin
     lTrack.Items[lTrack.Items.Count-1] := IntToStr(BytesTransferred) + ' bytes written';
     Shape1.Width := (BytesTransferred * Panel1.Width) div lTotal;
     Panel1.Caption := IntToStr(PercentDone) + '%';
 end;
 
+
 end.
+
 
 

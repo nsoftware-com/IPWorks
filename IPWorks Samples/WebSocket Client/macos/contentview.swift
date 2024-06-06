@@ -28,7 +28,6 @@ struct ContentView: View, WSClientDelegate {
   
   var documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/"
   @State private var server: String = "ws://echo.websocket.events/.ws"
-  @State private var port: String = ""
   @State private var message: String = ""
   @State private var outputRes: String = ""
   @State private var connected = false
@@ -48,14 +47,11 @@ struct ContentView: View, WSClientDelegate {
   var body: some View {
     VStack(alignment: .center)
     {
-      Text("This is a demo to show how to connect to a remote web socket server, send data, and receive the echoed response. Simply fill in the server and port to connect, then input data you would like to send.")
+      Text("This is a demo to show how to connect to a remote web socket server, send data, and receive the echoed response. Simply fill in the server to connect, then input data you would like to send.")
         .foregroundColor(Color.blue)
       HStack{
         Text("Server:")
-        
         TextField("localhost", text: $server)
-        Text("Port:")
-        TextField("777",text: $port)
         connectButton()
       }
       

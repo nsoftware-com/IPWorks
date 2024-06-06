@@ -11,6 +11,7 @@ object FormWSClient: TFormWSClient
   Font.Name = 'Tahoma'
   Font.Style = []
   OnClose = FormClose
+  PixelsPerInch = 96
   DesignSize = (
     554
     277)
@@ -138,6 +139,7 @@ object FormWSClient: TFormWSClient
     TabOrder = 5
   end
   object ipwWSClient1: TipwWSClient
+    SSLAcceptServerCertStore = 'MY'
     SSLCertStore = 'MY'
     OnConnected = WSClient1Connected
     OnDataIn = WSClient1DataIn

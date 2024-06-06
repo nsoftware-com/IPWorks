@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -144,7 +144,7 @@ begin
          ipwNetCode1.DecodedFile := EditTarget.Text;
          ipwNetcode1.Decode;
       end;
-   except on E: EipwNetcode do
+   except on E: EIPWorks do
       ShowMessage(E.Message);
    end;
    Screen.Cursor := crDefault;
@@ -165,7 +165,7 @@ begin
    ipwNetCode1.DecodedData := MemoDecoded.Text;
    try
       ipwNetcode1.Encode;
-   except on E: EipwNetcode do
+   except on E: EIPWorks do
       ShowMessage(E.Message);
    end;
    ipwNetCode1.FileName := '';
@@ -184,7 +184,7 @@ begin
       ipwNetcode1.Decode;
       MemoDecoded.Lines.Clear();
       MemoDecoded.Text := ipwNetCode1.DecodedData;
-   except on E: EipwNetcode do
+   except on E: EIPWorks do
       ShowMessage(E.Message);
    end;
    Screen.Cursor := crDefault;

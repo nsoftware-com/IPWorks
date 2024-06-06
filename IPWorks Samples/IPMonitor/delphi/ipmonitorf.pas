@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -32,7 +32,8 @@ type
     procedure IPMonitor1IPPacket(Sender: TObject; const SourceAddress: string;
       SourcePort: Integer; const DestinationAddress: string; DestinationPort,
       IPVersion, TOS, Id, Flags, Offset, TTL, Checksum, IPProtocol: Integer;
-      Payload: string);
+      const Payload: string; const PayloadB: TBytes; Timestamp: Int64);
+   
   private
     { Private declarations }
   public
@@ -80,6 +81,37 @@ begin
         end;
 end;
 
+procedure TFormIpmonitor.IPMonitor1IPPacket(Sender: TObject;
+  const SourceAddress: string; SourcePort: Integer;
+  const DestinationAddress: string; DestinationPort, IPVersion, TOS, Id, Flags,
+  Offset, TTL, Checksum, IPProtocol: Integer; const Payload: string;
+  const PayloadB: TBytes; Timestamp: Int64);
+var pi:Packet_INFO;
+begin
+    pi.Checksum := Checksum;
+    pi.DestinationAddress := DestinationAddress;
+    pi.DestinationPort := DestinationPort;
+    pi.Flags := Flags;
+    pi.Id := Id;
+    pi.IPProtocol := IPProtocol;
+    pi.IPVersion := IPVersion;
+    pi.Offset := Offset;
+    pi.Payload := Payload;
+    pi.SourceAddress := SourceAddress;
+    pi.SourcePort := SourcePort;
+    SetLength(Packets, Length(Packets)+1);
+    Packets[packetcount] := pi;
+    packetcount := packetcount + 1;
+    lvwPackets.Items.Add();
+    lvwPackets.Items.Item[lvwPackets.Items.Count-1].Caption := IntToStr(pi.Id);
+    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.IPProtocol));
+    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(pi.SourceAddress);
+    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.SourcePort));
+    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(pi.DestinationAddress);
+    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.DestinationPort));
+    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.IPVersion));
+end;
+
 procedure TFormIpmonitor.lvwPacketsClick(Sender: TObject);
 var i,j,ascvalue: integer;
         ch:char;
@@ -106,35 +138,6 @@ begin
       end;
 end;
 
-procedure TFormIpmonitor.ipmonitor1IPPacket(Sender: TObject;
-  const SourceAddress: String; SourcePort: Integer;
-  const DestinationAddress: String; DestinationPort, IPVersion, TOS, Id,
-  Flags, Offset, TTL, Checksum, IPProtocol: Integer; Payload: String);
-var pi:Packet_INFO;
-begin
-    pi.Checksum := Checksum;
-    pi.DestinationAddress := DestinationAddress;
-    pi.DestinationPort := DestinationPort;
-    pi.Flags := Flags;
-    pi.Id := Id;
-    pi.IPProtocol := IPProtocol;
-    pi.IPVersion := IPVersion;
-    pi.Offset := Offset;
-    pi.Payload := Payload;
-    pi.SourceAddress := SourceAddress;
-    pi.SourcePort := SourcePort;
-    SetLength(Packets, Length(Packets)+1);
-    Packets[packetcount] := pi;
-    packetcount := packetcount + 1;
-    lvwPackets.Items.Add();
-    lvwPackets.Items.Item[lvwPackets.Items.Count-1].Caption := IntToStr(pi.Id);
-    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.IPProtocol));
-    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(pi.SourceAddress);
-    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.SourcePort));
-    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(pi.DestinationAddress);
-    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.DestinationPort));
-    lvwPackets.Items.Item[lvwPackets.Items.Count-1].SubItems.Add(IntToStr(pi.IPVersion));
-end;
 
 end.
 

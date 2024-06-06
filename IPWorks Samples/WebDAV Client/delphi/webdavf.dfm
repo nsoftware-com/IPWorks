@@ -1,6 +1,7 @@
 object FormWebdav: TFormWebdav
   Left = 67
   Top = 124
+  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'WebDAV - Remote File Manager'
   ClientHeight = 474

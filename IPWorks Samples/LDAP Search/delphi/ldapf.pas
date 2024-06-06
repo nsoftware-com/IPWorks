@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -38,10 +38,11 @@ type
       const DN: String; ResultCode: Integer; const Description: String);
     procedure ipwLDAP1SearchResult(Sender: TObject; MessageId: Integer;
       const DN: String);
-    procedure ipwLDAP1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-      var Accept: Boolean);
+   
     procedure ipwLDAP1SSLStatus(Sender: TObject; const Message: string);
+    procedure ipwLDAP1SSLServerAuthentication(Sender: TObject;
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
   private
     { Private declarations }
   public
@@ -101,10 +102,9 @@ begin
     Memo1.Lines.Add(DN);
 end;
 
-
 procedure TFormLdap.ipwLDAP1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;
@@ -115,5 +115,3 @@ begin
 end;
 
 end.
-
-

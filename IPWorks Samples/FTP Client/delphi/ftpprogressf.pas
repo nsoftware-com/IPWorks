@@ -36,7 +36,7 @@ procedure TFormFtpprogress.ButtonCancelClick(Sender: TObject);
 begin
    try
       FormFtp.ipwFTP1.Abort();
-   except on E: EipwFTP do
+   except on E: EIPWorks do
       FormFtp.UpdateNotes(E.Message);
    end;
 end;

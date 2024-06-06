@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -54,11 +54,11 @@ type
     procedure ipwSMTP1EndTransfer(Sender: TObject; Direction: Integer);
     procedure ipwSMTP1StartTransfer(Sender: TObject; Direction: Integer);
     procedure ipwPOP1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-      var Accept: Boolean);
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
     procedure ipwSMTP1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-      var Accept: Boolean);
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
 
   private
     { Private declarations }
@@ -116,8 +116,8 @@ begin
 end;
 
 procedure TFormPopclient.ipwPOP1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;
@@ -141,7 +141,7 @@ begin
          ipwSMTP1.MailServer := FormLogin.EditSMTPServer.Text;
          try
             ipwPOP1.Connect;
-         except on E: EipwPOP do
+         except on E: EIPWorks do
             ShowMessage(E.Message);
          end;
 
@@ -159,7 +159,7 @@ begin
             ipwPOP1.MessageNumber := k;
             try
                ipwPOP1.Retrieve;
-            except on E: EipwPOP do
+            except on E: EIPWorks do
                ShowMessage(E.Message);
             end;
             ListViewMailbox.Items.Add();
@@ -175,7 +175,7 @@ begin
    begin
       try
          ipwPOP1.Disconnect();
-      except on E: EipwPOP do
+      except on E: EIPWorks do
          ShowMessage(E.Message);
       end;
       ButtonLoginLogout.Caption := 'Login';
@@ -218,7 +218,7 @@ begin
          //encode
          try
             ipwMIME1.EncodeToString;
-         except on E: EipwMIME do
+         except on E: EIPWorks do
             ShowMessage(E.Message);
          end;
 
@@ -236,7 +236,7 @@ begin
          ipwSMTP1.Connect();
          ipwSMTP1.Send();
          ipwSMTP1.Disconnect();
-      except on E: EipwSMTP do
+      except on E: EIPWorks do
          ShowMessage(E.Message);
       end;
       FormCompose.EditTo.Text := '';
@@ -288,7 +288,7 @@ begin
             //encode
             try
                ipwMIME1.EncodeToString;
-            except on E: EipwMIME do
+            except on E: EIPWorks do
                ShowMessage(E.Message);
             end;
 
@@ -304,7 +304,7 @@ begin
             ipwSMTP1.Connect;
             ipwSMTP1.Send;
             ipwSMTP1.Disconnect;
-         except on E: EipwSMTP do
+         except on E: EIPWorks do
             ShowMessage(E.Message);
          end;
          FormCompose.EditTo.Text := '';
@@ -331,7 +331,7 @@ begin
       ipwPOP1.MessageNumber := StrToInt(ListViewMailbox.Selected.Caption);
       try
          ipwPOP1.Delete();
-      except on E: EipwPOP do
+      except on E: EIPWorks do
          ShowMessage(E.Message);
       end;
       // Now for convenience, refresh the header list for remaining messages.
@@ -341,7 +341,7 @@ begin
          try
             ipwPOP1.Disconnect();
             ipwPOP1.Connect();
-         except on E: EipwPOP do
+         except on E: EIPWorks do
             ShowMessage(E.Message);
          end;
          ipwPOP1.MaxLines := 1;
@@ -353,7 +353,7 @@ begin
             ipwPOP1.MessageNumber := k;
             try
                ipwPOP1.Retrieve();
-            except on E: EipwPOP do
+            except on E: EIPWorks do
                ShowMessage(E.Message);
             end;
             ListViewMailbox.Items.Add();
@@ -385,7 +385,7 @@ begin
       try
          ipwPOP1.Disconnect();
          ipwPOP1.Connect();
-      except on E: EipwPOP do
+      except on E: EIPWorks do
          ShowMessage(E.Message);
       end;
       ipwPOP1.MaxLines := 1;
@@ -398,7 +398,7 @@ begin
          ipwPOP1.MessageNumber := k;
          try
             ipwPOP1.Retrieve();
-         except on E: EipwPOP do
+         except on E: EIPWorks do
             ShowMessage(E.Message);
          end;
          ListViewMailbox.Items.Add();
@@ -469,7 +469,7 @@ begin
 
 
 
-      except on E: EipwPOP do
+      except on E: EIPWorks do
          ShowMessage(E.Message);
       end;
 
@@ -499,9 +499,10 @@ begin
    FormProgress.ListBoxPITrail.Items.Add(Message);
 end;
 
+
 procedure TFormPopclient.ipwSMTP1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;
@@ -523,7 +524,7 @@ begin
   ipwMIME1.Message := EntityText;
   try
     ipwMIME1.DecodeFromString;
-  except on E: EipwMIME do
+  except on E: EIPWorks do
     //Part is not encoded
     ListBoxMessage.Items.Text := EntityText;
   end;
@@ -544,7 +545,7 @@ begin
     if AnsiLowerCase(Copy(ipwMime1.PartContentDisposition[i], 1, 10)) = 'attachment' then
     begin
       ComboBoxAttachments.Items.Add(ipwMime1.PartFilename[i]);
-      ComboBoxFileNames.Items.Add(ipwMime1.PartDecodedFile[i]);
+      ComboBoxFileNames.Items.Add(ipwMime1.DecodePartToFile(i));
     end;
   end;
 end;

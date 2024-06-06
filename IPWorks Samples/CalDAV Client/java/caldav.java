@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -13,27 +13,22 @@
  */
 
 import java.io.*;
+import java.io.*;
 import ipworks.*;
-
-import java.util.Calendar;
 import java.util.*;
 import java.text.*;
 
 public class caldav extends ConsoleDemo {
 
-    static Caldav caldav = new Caldav();
+    static CalDAV caldav = new CalDAV();
 
-    static Oauth oauth = new Oauth();
+    static OAuth oauth = new OAuth();
     static String command;               // user's command
-    static String[] argument;            // arguments to the user's command 
-    static String calendarName = "";
-
-    static String resourceURL = "";
-
+    static String[] argument;            // arguments to the user's command
     static String clientID = "";
 
     static String clientSecret = "";
-    static Vector resourceURIs = new Vector();
+    static List<String> resourceURIs = new ArrayList<>();
     static boolean exportingEvent = false;
     static int eventNumber = 1;
 
@@ -48,15 +43,15 @@ public class caldav extends ConsoleDemo {
             System.out.println("  provider  the provider name: Google");
             System.out.println("  username  the username to login");
             System.out.println("  password  the password to login");
-            System.out.println("\r\nExample: caldav -n \"Calendar name\" yahoo username password");
+            System.out.println("\r\nExample: caldav -n \"Calendar name\" google username password");
 
         } else {
             try {
-                caldav.addCaldavEventListener(new DefaultCaldavEventListener() {
-                    public void SSLServerAuthentication(CaldavSSLServerAuthenticationEvent e) {
+                caldav.addCalDAVEventListener(new DefaultCalDAVEventListener() {
+                    public void SSLServerAuthentication(CalDAVSSLServerAuthenticationEvent e) {
                         e.accept = true; //this will trust all certificates and it is not recommended for production use
                     }
-                    public void eventDetails(CaldavEventDetailsEvent e) {
+                    public void eventDetails(CalDAVEventDetailsEvent e) {
                         if (!exportingEvent) {
                             resourceURIs.add(e.resourceURI);
 
@@ -66,7 +61,7 @@ public class caldav extends ConsoleDemo {
                                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
                                 SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd HH:mm:ss");
                                 mStartDate = outputFormat.format(inputFormat.parse(mStartDate));
-                            } catch (Exception ex) {
+                            } catch (Exception ignored) {
                             }
 
                             System.out.format("%2d) %2$-50.50s %3$-20s%4$-30.30s %5$-100s\n", eventNumber, caldav.getSummary(), mStartDate, caldav.getLocation(), e.resourceURI);
@@ -92,11 +87,11 @@ public class caldav extends ConsoleDemo {
                             if (args[i].startsWith("-")) {
                                 if (args[i].equals("-i"))
                                     clientID = args[i + 1];// args[i+1] corresponds to the value of argument [i]
-                                if (args[i].equals("-s")) clientSecret = args[i + 1];
+                                if (args[i].equals("-s"))
+                                    clientSecret = args[i + 1];
                             }
                         }
                         String user = args[args.length - 2];
-                        String provider = args[args.length - 3].toLowerCase();
 
                         caldav.setUser(user);
                         oauth.setClientId(clientID);
@@ -104,7 +99,7 @@ public class caldav extends ConsoleDemo {
                         // Google CalDAV requires OAuth 2
                         oauth.setServerAuthURL("https://accounts.google.com/o/oauth2/auth");
                         oauth.setServerTokenURL("https://oauth2.googleapis.com/token");
-                        caldav.setAuthScheme(Caldav.authOAuth);
+                        caldav.setAuthScheme(CalDAV.authOAuth);
 
                         exportingEvent = false; //This is used so output from EventDetails is not displayed when exporting an even to an ics file
                         System.out.print("> ");
@@ -151,7 +146,7 @@ public class caldav extends ConsoleDemo {
 
                             oauth.setAuthorizationScope("https://www.googleapis.com/auth/calendar");
                             caldav.setAuthorization(oauth.getAuthorization());
-                            caldav.putCalendarEvent("https://apidata.googleusercontent.com/caldav/v2/" + user + "/events/" + caldav.getUID() + ".ics");
+                            caldav.createEvent("https://apidata.googleusercontent.com/caldav/v2/" + user + "/events/" + caldav.getUID() + ".ics");
 
 
                             System.out.println("Event Successfully Added.");
@@ -163,7 +158,7 @@ public class caldav extends ConsoleDemo {
 
                             oauth.setAuthorizationScope("https://www.googleapis.com/auth/calendar");
                             caldav.setAuthorization(oauth.getAuthorization());
-                            caldav.deleteCalendarEvent("https://apidata.googleusercontent.com/caldav/v2/" + user + "/events/" + resource);
+                            caldav.deleteEvent("https://apidata.googleusercontent.com/caldav/v2/" + user + "/events/" + resource);
 
                             System.out.println("Event Successfully Deleted.");
 
@@ -173,12 +168,12 @@ public class caldav extends ConsoleDemo {
                             System.out.format("    %1$-50.50s %2$-20s%3$-30.30s %4$-100s\n\n", "Summary", "Start Date", "Location", "ResourceURI");
                             oauth.setAuthorizationScope("https://www.googleapis.com/auth/calendar");
                             caldav.setAuthorization(oauth.getAuthorization());
-                            caldav.getCalendarEvent("https://apidata.googleusercontent.com/caldav/v2/" + user + "/events/" + file);
-
-                        } else if (argument[0].toLowerCase().equals("q")) {
+                            caldav.getEvent("https://apidata.googleusercontent.com/caldav/v2/" + user + "/events/" + file);
+                            WriteToFile(file, caldav.exportICS());
+                        } else if (argument[0].equalsIgnoreCase("q")) {
                             System.exit(0);
                             return;
-                        } else if (argument[0].equals("")) {
+                        } else if (argument[0].isEmpty()) {
                             // Do nothing
                         } else {
                             System.out.println("Bad command / Not implemented in demo.");
@@ -189,9 +184,7 @@ public class caldav extends ConsoleDemo {
                         System.exit(e.getCode());
                         return;
                     }
-
                 }
-
             } catch (Exception e) {
                 displayError(e);
             }
@@ -239,15 +232,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

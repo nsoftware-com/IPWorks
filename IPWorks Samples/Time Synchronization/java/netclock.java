@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -28,7 +28,7 @@ public class netclock extends ConsoleDemo {
 		
 		} else {
 			
-			Netclock myClock = new Netclock();
+			NetClock myClock = new NetClock();
 
 			//Uses the TIME protocol - you may specify SNTP by using the Protocol property
 			//myClock.setProtocol(myClock.tpSNTP);
@@ -71,15 +71,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

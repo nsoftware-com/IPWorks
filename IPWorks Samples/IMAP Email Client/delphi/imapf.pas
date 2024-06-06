@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -40,21 +40,21 @@ type
       Separator, Flags: String);
     procedure TreeViewMailboxesClick(Sender: TObject);
     procedure ListViewMessagesClick(Sender: TObject);
-    procedure ipwIMAP1MessagePart(Sender: TObject; const PartId: String;
-      Size: Integer; const ContentType, Filename, ContentEncoding,
-      Parameters, MultipartMode: String);
 
     procedure ButtonComposeClick(Sender: TObject);
     procedure ipwIMAP1MessageInfo(Sender: TObject; const MessageId,
-      Subject, MessageDate, From, Flags: String; Size: Integer);
+      Subject, MessageDate, From, Flags: String; Size: Int64);
     procedure ipwIMAP1Transfer(Sender: TObject; Direction: Integer;
       BytesTransferred: Int64; PercentDone: Integer; const Text: string);
     procedure ipwSMTP1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-      var Accept: Boolean);
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
     procedure ipwIMAP1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-      var Accept: Boolean);
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
+    procedure ipwIMAP1MessagePart(Sender: TObject; const PartId: string;
+      Size: Int64; const ContentType, FileName, ContentEncoding, Parameters,
+      MultipartMode, ContentId, ContentDisposition: string);
   private
     { Private declarations }
     head_: TTreeNode;
@@ -102,7 +102,7 @@ begin
             ipwIMAP1.Connect;
             ipwIMAP1.Mailbox := '*';
             ipwIMAP1.ListMailboxes;
-         except on E: EipwIMAP do
+         except on E: EIPWorks do
             ShowMessage(E.Message);
          end;
          ButtonLogin.Caption := 'Logout';
@@ -113,7 +113,7 @@ begin
    begin
       try
          ipwIMAP1.disconnect();
-      except on E: EipwIMAP do
+      except on E: EIPWorks do
          ShowMessage(E.Message);
       end;
       TreeViewMailboxes.Items.Clear();
@@ -220,10 +220,10 @@ begin
          begin
             ipwIMAP1.MessageSet := '1:' + IntToStr(ipwIMAP1.MessageCount);
             state := HEADERS_;
-            ipwIMAP1.FetchMessageInfo();
+            ipwIMAP1.RetrieveMessageInfo();
          end;
       end;
-   except on E: EipwIMAP do
+   except on E: EIPWorks do
       ShowMessage(E.Message);
    end;
    Screen.Cursor := crDefault;
@@ -239,39 +239,27 @@ begin
       ipwIMAP1.MessageSet := ListViewMessages.Selected.Caption;
       ListBoxMessage.Items.Clear();
       state := TEXT_;
-      ipwIMAP1.FetchMessageInfo();
+      ipwIMAP1.RetrieveMessageInfo();
       if textpart = '0' then
-         ipwIMAP1.FetchMessageText
+         ipwIMAP1.RetrieveMessageText
       else
       begin
-         ipwIMAP1.FetchMessagePart(textpart);
+         ipwIMAP1.RetrieveMessagePart(textpart);
          ListBoxMessage.Items.Text := ipwIMAP1.MessageText;
          textpart := '0';
       end;
       Label3.Caption := ListViewMessages.Selected.SubItems.Strings[0];
       Label4.Caption := ListViewMessages.Selected.SubItems.Strings[1];
-   except on E: EipwIMAP do
+   except on E: EIPWorks do
       ShowMessage(E.Message);
    end;
    Screen.Cursor := crDefault;
 end;
 
 
-
-
-
-procedure TFormImap.ipwIMAP1MessagePart(Sender: TObject; const PartId: String;
-  Size: Integer; const ContentType, Filename, ContentEncoding, Parameters,
-  MultipartMode: String);
-begin
-//   if (ContentType = 'text/plain') and (Filename = '' ) then
-//      textpart := PartId;
-end;
-
-
 procedure TFormImap.ipwIMAP1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;
@@ -283,10 +271,10 @@ begin
 end;
 
 procedure TFormImap.ipwSMTP1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
-  Accept:=true;
+  Accept:= true;
 end;
 
 procedure TFormImap.ButtonComposeClick(Sender: TObject);
@@ -319,7 +307,7 @@ begin
          //encode
          try
             ipwMIME1.EncodeToString;
-         except on E: EipwMIME do
+         except on E: EIPWorks do
             ShowMessage(E.Message);
          end;
 
@@ -338,7 +326,7 @@ begin
          ipwSMTP1.Connect();
          ipwSMTP1.Send();
          ipwSMTP1.Disconnect();
-      except on E: EipwSMTP do
+      except on E: EIPWorks do
          ShowMessage(E.Message);
       end;
       FormCompose.EditCc.Text := '';
@@ -352,7 +340,7 @@ end;
 
 procedure TFormImap.ipwIMAP1MessageInfo(Sender: TObject;
   const MessageId, Subject, MessageDate, From, Flags: String;
-  Size: Integer);
+  Size: Int64);
 begin
    if state = HEADERS_ then
    begin
@@ -365,11 +353,14 @@ begin
    end;
 end;
 
+procedure TFormImap.ipwIMAP1MessagePart(Sender: TObject; const PartId: string;
+  Size: Int64; const ContentType, FileName, ContentEncoding, Parameters,
+  MultipartMode, ContentId, ContentDisposition: string);
+begin
+//   if (ContentType = 'text/plain') and (Filename = '' ) then
+//      textpart := PartId;
+end;
+
 end.
-
-
-
-//---------------------------------------------------------------------------
-
 
 

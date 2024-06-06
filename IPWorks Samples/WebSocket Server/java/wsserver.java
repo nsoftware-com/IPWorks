@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -16,25 +16,25 @@ import java.io.*;
 import ipworks.*;
 
 public class wsserver extends ConsoleDemo {
-  private static Wsserver websocketserver;
+  private static WSServer websocketserver;
 
   public static void main(String[] args) {
     try {
-      websocketserver = new Wsserver();
+      websocketserver = new WSServer();
       System.out.println("************************************************************************");
       System.out.println("* This demo shows how to set up a WebSocket echo server on your system.*");
       System.out.println("************************************************************************\n");
 
-      websocketserver.addWsserverEventListener(new DefaultWsserverEventListener() {
-        public void connected(WsserverConnectedEvent e) {
+      websocketserver.addWSServerEventListener(new DefaultWSServerEventListener() {
+        public void connected(WSServerConnectedEvent e) {
           System.out.println(websocketserver.getConnections().item(e.connectionId).getRemoteHost() + " connected.");
         }
 
-        public void disconnected(WsserverDisconnectedEvent e) {
+        public void disconnected(WSServerDisconnectedEvent e) {
           System.out.println("Remote host disconnected: " + e.description);
         }
 
-        public void dataIn(WsserverDataInEvent e) {
+        public void dataIn(WSServerDataInEvent e) {
           System.out.println("Echoing '" + new String(e.text) + "' to " + websocketserver.getConnections().item(e.connectionId).getRemoteHost());
           try {
             websocketserver.send(e.connectionId, e.text);
@@ -45,7 +45,7 @@ public class wsserver extends ConsoleDemo {
       });
 
       websocketserver.setLocalPort(Integer.parseInt(prompt("Local Port",":","777")));
-      websocketserver.setListening(true);
+      websocketserver.startListening();
 
       System.out.println("\r\nStarted Listening.");
       System.out.println("\r\nPlease input a command: \r\n1) Send Data \r\n2) Exit");
@@ -60,7 +60,7 @@ public class wsserver extends ConsoleDemo {
             if (keys.length > 0) {
               for (int i = 0; i < keys.length; i++) {
                 WSConnection connection = (WSConnection) connections.get(keys[i]);
-                connection.setDataToSend(text);
+                websocketserver.sendText(connection.getConnectionId(), text);
               }
               System.out.println("Sending success.");
             } else {
@@ -74,7 +74,7 @@ public class wsserver extends ConsoleDemo {
         }
       }
 
-      websocketserver.setListening(false);
+      websocketserver.stopListening();
       websocketserver.shutdown();
       System.out.println(">Stopped Listening.");
 
@@ -107,15 +107,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

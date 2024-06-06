@@ -76,12 +76,12 @@ struct ContentView: View, WSServerDelegate {
           server.localPort = 777
           if (server.listening)
           {
-              try server.setListening(listening: false)
+              try server.stopListening()
               connected=false
           }
           else
           {
-              try server.setListening(listening: true)
+              try server.startListening()
               outputRes+="Server listening at:\nws://\(server.localHost):\(String(server.localPort))\n"
               connected=true
           }
@@ -90,7 +90,7 @@ struct ContentView: View, WSServerDelegate {
         {
           do
           {
-            try server.setListening(listening: false)
+            try server.stopListening()
             connected=false
           }
           catch {}

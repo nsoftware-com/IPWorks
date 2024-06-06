@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -17,7 +17,7 @@ import ipworks.*;
 
 public class echoserver extends ConsoleDemo {
 
-	private static Tcpserver tcpserver1;
+	private static TCPServer tcpserver1;
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
@@ -27,18 +27,18 @@ public class echoserver extends ConsoleDemo {
 			System.out.println("\r\nExample: echoserver 777");
 		} else {
 			try {
-				tcpserver1 = new Tcpserver();
+				tcpserver1 = new TCPServer();
 				System.out.println("*****************************************************************************************");
 				System.out.println("* This demo shows how to set up an echo server on your computer. By default, the server *");
 				System.out.println("* will operate in plaintext. If SSL is desired, set SSLCert and SSLStartMode.           *");
 				System.out.println("*****************************************************************************************\n");
 
-				tcpserver1.addTcpserverEventListener(new DefaultTcpserverEventListener() {
-					public void SSLClientAuthentication(TcpserverSSLClientAuthenticationEvent arg0) {
+				tcpserver1.addTCPServerEventListener(new DefaultTCPServerEventListener() {
+					public void SSLClientAuthentication(TCPServerSSLClientAuthenticationEvent arg0) {
 						arg0.accept = true;
 					}
 
-					public void connected(TcpserverConnectedEvent e) {
+					public void connected(TCPServerConnectedEvent e) {
 						ConnectionMap connections = tcpserver1.getConnections();
 						Connection connection = (Connection) connections.get(e.connectionId);
 						System.out.println(connection.getRemoteHost() + " has connected.");
@@ -49,11 +49,11 @@ public class echoserver extends ConsoleDemo {
 						}
 					}
 
-					public void dataIn(TcpserverDataInEvent e) {
+					public void dataIn(TCPServerDataInEvent e) {
 						try {
 							ConnectionMap connections = tcpserver1.getConnections();
 							Connection connection = (Connection) connections.get(e.connectionId);
-							connection.setDataToSend(e.text);
+							tcpserver1.send(connection.getConnectionId(), e.text);
 							System.out.println("Echoing '" + new String(e.text) + "' to client " + connection.getRemoteHost() + ".");
 							System.out.print(">");
 						} catch (IPWorksException e1) {
@@ -61,14 +61,14 @@ public class echoserver extends ConsoleDemo {
 						}
 					}
 
-					public void disconnected(TcpserverDisconnectedEvent e) {
+					public void disconnected(TCPServerDisconnectedEvent e) {
 						System.out.println("Disconnected " + e.description + " from " + e.connectionId + ".");
 						System.out.print(">");
 					}
 				});
 
 				tcpserver1.setLocalPort(Integer.parseInt(args[0]));
-				tcpserver1.setListening(true);
+				tcpserver1.startListening();
 
 				System.out.println("\r\nStarted Listening.");
 				System.out.println("\r\nPlease input command: \r\n- 1 Send Data \r\n- 2 Exit");
@@ -84,7 +84,7 @@ public class echoserver extends ConsoleDemo {
 							if (keys.length > 0) {
 								for (int i = 0; i < keys.length; i++) {
 									Connection connection = (Connection) connections.get(keys[i]);
-									connection.setDataToSend(text);
+									tcpserver1.sendText(connection.getConnectionId(), text);
 								}
 								System.out.println("Sending success.");
 							} else {
@@ -97,7 +97,7 @@ public class echoserver extends ConsoleDemo {
 						}
 					}
 				}
-				tcpserver1.setListening(false);
+				tcpserver1.stopListening();
 				tcpserver1.shutdown();
 				System.out.println(">Stopped Listening.");
 			} catch (Exception ex) {
@@ -127,15 +127,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

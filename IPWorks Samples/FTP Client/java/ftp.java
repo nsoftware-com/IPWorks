@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -17,7 +17,7 @@ import ipworks.*;
 
 public class ftp extends ConsoleDemo {
 	
-	private static Ftp ftp1 = null;
+	private static FTP ftp1 = null;
 	private static int verbose;
 	private static long transtime;
 	private static long transbytes;
@@ -36,31 +36,31 @@ public class ftp extends ConsoleDemo {
 		} else {
 			
 			try {
-			      ftp1 = new Ftp();			      
-			      ftp1.addFtpEventListener(new DefaultFtpEventListener(){
+			      ftp1 = new FTP();			      
+			      ftp1.addFTPEventListener(new DefaultFTPEventListener(){
 			    	  
-			    	  public void PITrail(FtpPITrailEvent e) {
+			    	  public void PITrail(FTPPITrailEvent e) {
 			    		  if (verbose == 1)
 			    		      System.out.println(e.message);	
 			    		}			    		
-			    		public void SSLServerAuthentication(FtpSSLServerAuthenticationEvent arg0) {
+			    		public void SSLServerAuthentication(FTPSSLServerAuthenticationEvent arg0) {
 			    			arg0.accept=true; //this will trust all certificates and it is not recommended for production use
 			    		}				    					    					    					    		
-			    		public void dirList(FtpDirListEvent e) {
+			    		public void dirList(FTPDirListEvent e) {
 			    			System.out.println(e.dirEntry);	
 			    		}
-			    		public void endTransfer(FtpEndTransferEvent e) {
+			    		public void endTransfer(FTPEndTransferEvent e) {
 			    			long endtime;
 			    		    endtime = System.currentTimeMillis();
 			    		    transtime = endtime - transtime;		
 			    		}			    		
-			    		public void error(FtpErrorEvent e) {
+			    		public void error(FTPErrorEvent e) {
 			    			System.out.println("\nError " + e.errorCode + ": " + e.description);
 			    		}
-			    		public void startTransfer(FtpStartTransferEvent e) {
+			    		public void startTransfer(FTPStartTransferEvent e) {
 			    			transtime = System.currentTimeMillis();			    			
 			    		}
-			    		public void transfer(FtpTransferEvent e) {
+			    		public void transfer(FTPTransferEvent e) {
 			    			transbytes = e.bytesTransferred;	
 			    		}  
 																						    				    				    			      				      			      					      					      					      	            		            	
@@ -87,9 +87,9 @@ public class ftp extends ConsoleDemo {
 			          ftp1.setRemoteFile(arguments[2]);
 			          ftp1.append();
 			        } else if (arguments[0].equals("ascii")) {
-			          ftp1.setTransferMode(Ftp.tmASCII);
+			          ftp1.changeTransferMode(FTP.tmASCII);
 			        } else if (arguments[0].equals("binary")) {
-			          ftp1.setTransferMode(Ftp.tmBinary);
+			          ftp1.changeTransferMode(FTP.tmBinary);
 			        } else if (arguments[0].equals("bye") || arguments[0].equals("quit") || arguments[0].equals("exit")) {
 			          ftp1.logoff();
 			          break;
@@ -97,7 +97,7 @@ public class ftp extends ConsoleDemo {
 			          ftp1.logoff();
 			        } else if (arguments[0].equals("cd")) {
 			          if (arguments.length > 0)
-			            ftp1.setRemotePath(arguments[1]);
+			            ftp1.changeRemotePath(arguments[1]);
 			        } else if (arguments[0].equals("get")) {
 			          ftp1.setRemoteFile(arguments[1]);
 			          ftp1.setLocalFile(arguments[1]);
@@ -105,10 +105,10 @@ public class ftp extends ConsoleDemo {
 			          updateTime();
 			        } else if (arguments[0].equals("ls")) {
 			          if (arguments.length > 1) {
-			            String pathname = ftp1.getRemotePath();
-			            ftp1.setRemotePath(arguments[1]);
+			            String pathname = ftp1.queryRemotePath();
+			            ftp1.changeRemotePath(arguments[1]);
 			            ftp1.listDirectoryLong();
-			            ftp1.setRemotePath(pathname);
+			            ftp1.changeRemotePath(pathname);
 			          } else			        	
 			            ftp1.listDirectoryLong();
 			        } else if (arguments[0].equals("mkdir")) {
@@ -137,7 +137,7 @@ public class ftp extends ConsoleDemo {
 			          ftp1.upload();
 			          updateTime();
 			        } else if (arguments[0].equals("pwd")) {
-			          System.out.println(ftp1.getRemotePath());
+			          System.out.println(ftp1.queryRemotePath());
 			        } else if (arguments[0].equals("rm")) {
 			          if (arguments.length > 1)
 			            ftp1.deleteFile(arguments[1]);
@@ -216,15 +216,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -44,11 +44,12 @@ type
       const Description: string);
     procedure WSClient1Error(Sender: TObject; ErrorCode: Integer;
       const Description: string);
-    procedure WSClient1DataIn(Sender: TObject; DataFormat: Integer;
-      Text: string; TextB: TArray<System.Byte>; EOM: Boolean; EOL: Boolean);
+    procedure WSClient1DataIn(Sender: TObject; const DataFormat: Integer;
+      const Text: string; const TextB: TArray<System.Byte>; const EOM,
+      EOL: Boolean);
     procedure WSClient1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject,
-      CertIssuer, Status: string; var Accept: Boolean);
+      const CertEncoded: string; const CertEncodedB: TArray<System.Byte>;
+      const CertSubject, CertIssuer, Status: string; var Accept: Boolean);
   private
     { Private declarations }
   public
@@ -77,16 +78,31 @@ end;
 
 procedure TFormWSClient.btnSendClick(Sender: TObject);
 begin
-  ipwWSClient1.DataToSend := txtData.Text;
+  ipwWSClient1.SendText(txtData.Text);
   txtData.Text := '';
 end;
 
 procedure TFormWSClient.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   // Disconnect if the form is closed
-  ipwWSClient1.Connected := False;
+  ipwWSClient1.Disconnect();
 end;
 
+
+procedure TFormWSClient.WSClient1SSLServerAuthentication(Sender: TObject;
+  const CertEncoded: string; const CertEncodedB: TArray<System.Byte>;
+  const CertSubject, CertIssuer, Status: string; var Accept: Boolean);
+begin
+  Accept := True;
+end;
+
+procedure TFormWSClient.WSClient1DataIn(Sender: TObject;
+  const DataFormat: Integer; const Text: string;
+  const TextB: TArray<System.Byte>; const EOM, EOL: Boolean);
+begin
+  // display received data to user
+  txtReceived.Lines.Add('Received: ' + Text);
+end;
 
 procedure TFormWSClient.WSClient1Connected(Sender: TObject; StatusCode: Integer;
   const Description: string);
@@ -101,13 +117,6 @@ begin
   end;
 end;
 
-procedure TFormWSClient.WSClient1DataIn(Sender: TObject;
-  DataFormat: Integer; Text: string; TextB: TArray<System.Byte>; EOM: Boolean; EOL: Boolean);
-begin
-  // display received data to user
-  txtReceived.Lines.Add('Received: ' + Text);
-end;
-
 procedure TFormWSClient.WSClient1Disconnected(Sender: TObject;
   StatusCode: Integer; const Description: string);
 begin
@@ -119,13 +128,6 @@ procedure TFormWSClient.WSClient1Error(Sender: TObject; ErrorCode: Integer;
   const Description: string);
 begin
   lblStatus.Caption := 'WebSocketClient Error: [' + IntToStr(ErrorCode) + '] ' + Description;
-end;
-
-procedure TFormWSClient.WSClient1SSLServerAuthentication(
-  Sender: TObject; CertEncoded: string; CertEncodedB: TArray<System.Byte>;
-  const CertSubject, CertIssuer, Status: string; var Accept: Boolean);
-begin
-Accept := True;
 end;
 
 end.

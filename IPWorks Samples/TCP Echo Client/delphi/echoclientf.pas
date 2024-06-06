@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -57,10 +57,12 @@ type
     procedure DisconnectClick(Sender: TObject);
     procedure TCPClient1Disconnected(Sender: TObject; StatusCode: Integer;
       const Description: String);
-    procedure TCPClient1DataIn(Sender: TObject; Text: string; TextB: TArray<System.Byte>; EOL: Boolean);
+   
+    procedure TCPClient1DataIn(Sender: TObject; const Text: string;
+      const TextB: TBytes; EOL: Boolean);
     procedure TCPClient1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-      var Accept: Boolean);
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
   private
     { Private declarations }
   public
@@ -84,7 +86,7 @@ begin
     gStartTime := GetTickCount;
 
     {send anything and the server will send the time}
-    TCPClient1.DataToSend := tEcho.Text + #10;
+    TCPClient1.SendText(tEcho.Text + #10);
 end;
 
 procedure TFormEchoclient.TCPClient1Error(Sender: TObject; ErrorCode: integer;
@@ -111,8 +113,8 @@ begin
 end;
 
 procedure TFormEchoclient.TCPClient1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;
@@ -155,7 +157,7 @@ begin
             ListStatus.Items.Add('Timed out ');
         end;
 
-    except on E: EipwTCPClient do
+    except on E: EIPWorks do
         ListStatus.Items.Add('Exception: ' + E.Message);
     end;
 end;
@@ -187,17 +189,24 @@ end;
 
 procedure TFormEchoclient.FormDestroy(Sender: TObject);
 begin
-	TCPClient1.Connected := FALSE;
+	TCPClient1.Disconnect();
 end;
 
 procedure TFormEchoclient.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-	TCPClient1.Connected := FALSE;
+	TCPClient1.Disconnect();
 end;
 
 procedure TFormEchoclient.DisconnectClick(Sender: TObject);
 begin
-    tcpclient1.connected := false;
+    TCPClient1.Disconnect()
+end;
+
+procedure TFormEchoclient.TCPClient1DataIn(Sender: TObject; const Text: string;
+  const TextB: TBytes; EOL: Boolean);
+begin
+  lTrack.Items.Add(Text + ': ' +
+  IntToStr(GetTickCount - gStartTime) + ' milliseconds');
 end;
 
 procedure TFormEchoclient.TCPClient1Disconnected(Sender: TObject; StatusCode: Integer;
@@ -206,18 +215,7 @@ begin
     ListStatus.Items.Add('Disconnected');
 end;
 
-procedure TFormEchoclient.TCPClient1DataIn(Sender: TObject; Text: string; TextB: TArray<System.Byte>;
-  EOL: Boolean);
-begin
-    lTrack.Items.Add(Text + ': ' +
-        IntToStr(GetTickCount - gStartTime) + ' milliseconds');
-end;
-
-
-
-
 
 end.
-
 
 

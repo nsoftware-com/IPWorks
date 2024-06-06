@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -32,27 +32,27 @@ public class ldap extends ConsoleDemo {
 			System.out.println("  server    the name or address of the LDAP server");
 			System.out.println("\r\nExample: ldap -s CN=Users,DC=Domain -u DOMAIN\\Username -p password server");
 		} else {
-			Ldap ldap1 = new Ldap();
+			LDAP ldap1 = new LDAP();
 			try {
-				ldap1.addLdapEventListener(new DefaultLdapEventListener() {
+				ldap1.addLDAPEventListener(new DefaultLDAPEventListener() {
 
-					public void SSLServerAuthentication(LdapSSLServerAuthenticationEvent arg0) {
+					public void SSLServerAuthentication(LDAPSSLServerAuthenticationEvent arg0) {
 						arg0.accept = true; // this will trust all certificates and it is not recommended for production use
 					}
 
-					public void error(LdapErrorEvent e) {
+					public void error(LDAPErrorEvent e) {
 						System.out.println("\nError " + e.errorCode + ": " + e.description);
 					}
 
-					public void result(LdapResultEvent e) {
+					public void result(LDAPResultEvent e) {
 						System.out.println(e.resultCode + "  " + e.resultDescription);
 					}
 
-					public void searchComplete(LdapSearchCompleteEvent e) {
+					public void searchComplete(LDAPSearchCompleteEvent e) {
 						System.out.println(e.resultCode + "  " + e.resultDescription);
 					}
 
-					public void searchResult(LdapSearchResultEvent e) {
+					public void searchResult(LDAPSearchResultEvent e) {
 						System.out.println(e.DN);
 					}
 				});
@@ -117,15 +117,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

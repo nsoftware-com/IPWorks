@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -31,12 +31,12 @@ public class certmgr {
 		
 		} else {
 			
-			Certmgr certmgr1= new Certmgr();
+			CertMgr certmgr1= new CertMgr();
 	    	
 	    	try {
 	            	    		
-	            certmgr1.addCertmgrEventListener(new DefaultCertmgrEventListener(){
-	            	public void certList(CertmgrCertListEvent e) {
+	            certmgr1.addCertMgrEventListener(new DefaultCertMgrEventListener(){
+	            	public void certList(CertMgrCertListEvent e) {
 	            		i++;
 	                    System.out.println(i + ". " + e.certSubject);
 	                }	            	
@@ -75,15 +75,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

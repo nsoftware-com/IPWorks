@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -78,7 +78,7 @@ begin
             tHostName.text + '...');
       ipwPing1.PingHost(tHostName.Text);
       DisplayInfo;
-   except on E: EipwPing do
+   except on E: EIPWorks do
       DisplayError(e.Message);
    end;
 end;

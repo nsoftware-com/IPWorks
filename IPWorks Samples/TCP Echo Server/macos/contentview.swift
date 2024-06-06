@@ -72,11 +72,11 @@ struct ContentView: View, TCPServerDelegate {
         server.localPort = 777
         if (server.listening)
         {
-          try server.setListening(listening: false)
+          try server.stopListening()
         }
         else
         {
-          try server.setListening(listening: true)
+          try server.startListening()
           outputRes+="Server listening at:\nHost: \(server.localHost)\nPort: \(String(server.localPort))\n"
         }
       }
@@ -84,7 +84,7 @@ struct ContentView: View, TCPServerDelegate {
       {
         do
         {
-          try server.setListening(listening: false)
+          try server.stopListening()
         }
         catch {}
         outputRes += "Error: \(error)"

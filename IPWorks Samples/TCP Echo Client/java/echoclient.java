@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -17,7 +17,7 @@ import ipworks.*;
 
 public class echoclient extends ConsoleDemo {
 
-	private static Tcpclient tcpclient;
+	private static TCPClient tcpclient;
 
 	public static void main(String[] args) {
 		if (args.length != 2) {
@@ -28,27 +28,27 @@ public class echoclient extends ConsoleDemo {
 			System.out.println("\r\nExample: echoclient localhost 777");
 		} else {
 			try {
-				tcpclient = new Tcpclient();
+				tcpclient = new TCPClient();
 				System.out.println("*************************************************************************************************************");
 				System.out.println("* This is a demo to show how to connect to a remote echo server, send data, and receive the echoed response.*");
 				System.out.println("* By default, the connection will be attempted in plaintext. If SSL is desired, simply set SSLStartMode.    *");
 				System.out.println("*************************************************************************************************************\n");
-				tcpclient.addTcpclientEventListener(new DefaultTcpclientEventListener() {
-					public void SSLServerAuthentication(TcpclientSSLServerAuthenticationEvent e) {
+				tcpclient.addTCPClientEventListener(new DefaultTCPClientEventListener() {
+					public void SSLServerAuthentication(TCPClientSSLServerAuthenticationEvent e) {
 						e.accept = true;
 					}
 
-					public void connected(TcpclientConnectedEvent e) {
+					public void connected(TCPClientConnectedEvent e) {
 						System.out.println("\r\n" + tcpclient.getRemoteHost() + " has connected.");
 						System.out.print(">");
 					}
 
-					public void dataIn(TcpclientDataInEvent e) {
+					public void dataIn(TCPClientDataInEvent e) {
 						System.out.println("Received " + new String(e.text) + " from " + tcpclient.getRemoteHost());
 						System.out.print(">");
 					}
 
-					public void disconnected(TcpclientDisconnectedEvent e) {
+					public void disconnected(TCPClientDisconnectedEvent e) {
 						System.out.println("Disconnected " + e.description + " from " + tcpclient.getRemoteHost() + ".");
 						System.out.print(">");
 					}
@@ -65,7 +65,7 @@ public class echoclient extends ConsoleDemo {
 						if (System.in.available() > 0) {
 							String command = String.valueOf(read());
 							if ("1".equals(command)) {
-								tcpclient.setDataToSend(prompt("Please input sending data") + "\r\n");
+								tcpclient.sendText(prompt("Please input sending data") + "\r\n");
 								System.out.println("Sending success.");
 								System.out.println("\r\nPlease input command: \r\n- 1 Send Data \r\n- 2 Exit");
 								System.out.print(">");
@@ -105,15 +105,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

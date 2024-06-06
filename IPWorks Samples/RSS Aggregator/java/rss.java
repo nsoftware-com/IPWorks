@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -19,17 +19,17 @@ public class rss extends ConsoleDemo {
 	
 	public static void main(String[] args) {
 		
-		Rss rss1 = new Rss();
+		RSS rss1 = new RSS();
 
 		try {
 			
-			rss1.addRssEventListener(new DefaultRssEventListener(){
-				public void SSLServerAuthentication(RssSSLServerAuthenticationEvent arg0) {
+			rss1.addRSSEventListener(new DefaultRSSEventListener(){
+				public void SSLServerAuthentication(RSSSSLServerAuthenticationEvent arg0) {
 					arg0.accept=true; //this will trust all certificates and it is not recommended for production use		
 				}								
 	        });
 			System.out.println("Fetching feed...");
-			rss1.setFollowRedirects(Rss.frAlways);
+			rss1.setFollowRedirects(RSS.frAlways);
 			rss1.getFeed("https://news.google.com/news?ned=us&topic=h&output=rss");
 
 			System.out.println("RSS Channel" + rss1.getChannel().getTitle());
@@ -81,15 +81,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

@@ -1,20 +1,18 @@
 object FormEchoserver: TFormEchoserver
   Left = 321
   Top = 119
-  Width = 415
-  Height = 344
   Caption = 'TCP Echo Service Server'
+  ClientHeight = 305
+  ClientWidth = 399
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -14
   Font.Name = 'System'
   Font.Style = []
-  OldCreateOrder = True
   DesignSize = (
-    407
-    317)
-  PixelsPerInch = 96
+    399
+    305)
   TextHeight = 16
   object Label1: TLabel
     Left = 8
@@ -68,6 +66,7 @@ object FormEchoserver: TFormEchoserver
     Top = 129
     Width = 402
     Height = 183
+    TabStop = False
     Anchors = [akLeft, akTop, akRight, akBottom]
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
@@ -76,7 +75,7 @@ object FormEchoserver: TFormEchoserver
     Font.Style = []
     ItemHeight = 13
     ParentFont = False
-    TabOrder = 0
+    TabOrder = 3
     OnDblClick = lTrackDblClick
   end
   object ButtonStart: TButton
@@ -120,11 +119,11 @@ object FormEchoserver: TFormEchoserver
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 0
     Text = '777'
   end
   object TCPServer1: TipwTCPServer
-    DefaultMaxLineLength = 2048
+    SSLCertStore = 'MY'
     OnConnected = TCPServer1Connected
     OnDataIn = TCPServer1DataIn
     OnDisconnected = TCPServer1Disconnected

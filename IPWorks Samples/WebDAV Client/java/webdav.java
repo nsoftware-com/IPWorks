@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -20,7 +20,7 @@ import ipworks.*;
 
 public class webdav extends ConsoleDemo {
 
-    static Webdav webdav = new Webdav();
+    static WebDAV webdav = new WebDAV();
     static String command;               // user's command
     static String[] argument;            // arguments to the user's command
 
@@ -37,24 +37,24 @@ public class webdav extends ConsoleDemo {
 
         } else {
             try {
-                webdav.addWebdavEventListener(new DefaultWebdavEventListener() {
-                    public void SSLServerAuthentication(WebdavSSLServerAuthenticationEvent e) {
+                webdav.addWebDAVEventListener(new DefaultWebDAVEventListener() {
+                    public void SSLServerAuthentication(WebDAVSSLServerAuthenticationEvent e) {
                         e.accept = true; //this will trust all certificates and it is not recommended for production use
                     }
 
-                    public void connected(WebdavConnectedEvent e) {
+                    public void connected(WebDAVConnectedEvent e) {
                         System.out.println("Server connected");
                     }
 
-                    public void connectionStatus(WebdavConnectionStatusEvent e) {
+                    public void connectionStatus(WebDAVConnectionStatusEvent e) {
                         System.out.println("Status code " + e.statusCode + ": " + e.description);
                     }
 
-                    public void disconnected(WebdavDisconnectedEvent e) {
+                    public void disconnected(WebDAVDisconnectedEvent e) {
                         System.out.println("Server disconnected");
                     }
                     // Resource will be empty if data is being posted to the server
-                    public void transfer(WebdavTransferEvent e) {
+                    public void transfer(WebDAVTransferEvent e) {
                         System.out.println("Resource being received from server (in full text): \n" +
                                            "========================================= \n" + new String(e.text, StandardCharsets.UTF_8));
 
@@ -186,15 +186,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

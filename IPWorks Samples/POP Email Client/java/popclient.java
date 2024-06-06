@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -27,7 +27,7 @@ public class popclient extends ConsoleDemo {
     static String msg_subject;
     static int msg_field;
     static int lines;
-    static Pop pop;
+    static POP pop;
  
     public static void main(String[] args) {
     	
@@ -48,8 +48,8 @@ public class popclient extends ConsoleDemo {
 			lines = 0;
 			reply = "";
         
-			pop = new Pop();                // POP object
-			Filemailer smtp = new Filemailer();   // SMTP object
+			pop = new POP();                // POP object
+			SMTP smtp = new SMTP();   // SMTP object
 
 			String command;     			// user's command
 			String buffer;      			// text buffer
@@ -60,11 +60,11 @@ public class popclient extends ConsoleDemo {
 			int msgnum = 0;             	// current message number for next command
 
 			try {
-				pop.addPopEventListener(new DefaultPopEventListener(){      		
-					public void SSLServerAuthentication(PopSSLServerAuthenticationEvent e) {
+				pop.addPOPEventListener(new DefaultPOPEventListener(){      		
+					public void SSLServerAuthentication(POPSSLServerAuthenticationEvent e) {
 						e.accept=true; //this will trust all certificates and it is not recommended for production use	
 					}
-					public void header(PopHeaderEvent e) {
+					public void header(POPHeaderEvent e) {
 						if (state == FULL){
 							System.out.println(e.field+": "+e.value);
 						} else if (e.field.equals("From") ){
@@ -90,7 +90,7 @@ public class popclient extends ConsoleDemo {
 							msg_field = 0;
 						}
 					}       		
-					public void transfer(PopTransferEvent e) {
+					public void transfer(POPTransferEvent e) {
 						String s = new String(e.text);
 						if (state == FULL){
 							System.out.println(s);
@@ -316,15 +316,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

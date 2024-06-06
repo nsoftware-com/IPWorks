@@ -1,138 +1,134 @@
-<?php $sendBuffer = TRUE; ob_start(); ?>
-<html>
-<head>
-<title>IPWorks 2022 Demos - POP Email Client</title>
-<link rel="stylesheet" type="text/css" href="stylesheet.css">
-<meta name="description" content="IPWorks 2022 Demos - POP Email Client">
-</head>
-
-<body>
-
-<div id="content">
-<h1>IPWorks - Demo Pages</h1>
-<h2>POP Email Client</h2>
-<p>A simple email client. It shows how to use the SMTP and POP components access POP and SMTP mail servers.</p>
-<a href="default.php">[Other Demos]</a>
-<hr/>
-
 <?php
+/*
+ * IPWorks 2024 PHP Edition - Sample Project
+ *
+ * This sample project demonstrates the usage of IPWorks in a 
+ * simple, straightforward way. It is not intended to be a complete 
+ * application. Error handling and other checks are simplified for clarity.
+ *
+ * www.nsoftware.com/ipworks
+ *
+ * This code is subject to the terms and conditions specified in the 
+ * corresponding product license agreement which outlines the authorized 
+ * usage and restrictions.
+ */
 require_once('../include/ipworks_pop.php');
 require_once('../include/ipworks_smtp.php');
 require_once('../include/ipworks_mime.php');
 require_once('../include/ipworks_htmlmailer.php');
 require_once('../include/ipworks_const.php');
-
 ?>
-
 <?php
-  class MyPOP extends IPWorks_POP{
+  class MyPOP extends IPWorks_POP {
     function FireSSLServerAuthentication($param) {
       $param['accept'] = true;
-      return $param;
-		}
+      return $param;	  
+    }
   }
 
-  $pop = new MyPOP();
-?>
+$pop = new MyPOP();
 
-<form method=POST>
-<center>
-<table width="90%">
+if ($argc < 4) {
+echo "Usage: php pop_email_client.php [options] server user password\n";
+echo "Options:\n";
+echo "  -ssl       whether or not to use SSL/TLS (default true)\n";
+echo "  -port      the port of a POP mail server (default 995) \n";
+echo "  server     the name or address of a POP mail server\n";
+echo "  user       the user identifier for the mailbox\n";
+echo "  password   the password for the mailbox user\n\n";
+echo "Example: php pop_email_client.php -ssl true -port 995 mypopserver myusername mypassword\n";
+} else {
+  
+  try {
+	  
+	$pop->setMailServer($argv[$argc - 3]);
+	$pop->setUser($argv[$argc - 2]);
+    $pop->setPassword($argv[$argc - 1]);
+  
+  $pop->setSSLStartMode(0); //automatic (default is 3=none)
+  $pop->setMailPort(995);
+	
+	for ($i = 1; $i < $argc - 3; $i++) {
+	  if (str_starts_with( $argv[$i], "-" )) {
+      if ( $argv[$i] == "-ssl" ) {
+        if ($argv[++$i] == "false") {
+        $pop->setSSLStartMode(3); //none
+        }
+      }
+      else if ( $argv[$i] == "-port" ) {
+        if ( ctype_digit($argv[++$i]) ) { // Check conversion to integer
+        $pop->setMailPort($argv[$i]);
+        }
+      }
+	  }  
+	}
+	
+	echo "Attempting to connect:\n";
+	$pop->doConnect();
+	
+	$msgCount = $pop->getMessageCount();
+	echo "Found $msgCount messages.\n";
 
- <tr><td>Server:      <td><input type=text name=server value="<?php echo isset($_POST["server"])?$_POST["server"]:""; ?>" size=40>
- <tr><td>User:        <td><input type=text name=user value="<?php echo isset($_POST["user"])?$_POST["user"]:""; ?>" size=20>
- <tr><td>Password:    <td><input type=password name=password value="<?php echo isset($_POST["password"])?$_POST["password"]:""; ?>" size=20>
- <tr><td nowrap>Enable SSL   <td><input type="checkbox" name="useSSL" value="1" checked>
- <SMALL>if you enable SSL please make sure you are connecting to a secure server.</SMALL>
+  echo "\nRetrieving message list from POP server...\n";
 
- <tr><td><td><input type=submit value="  Go!  ">
-
-</table>
-</center>
-</form>
-
-<?php
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-  if (!empty($_REQUEST["useSSL"])) {
-    $pop->setSSLStartMode(0); //automatic
-    $pop->setMailPort(995);
-  }
-
-  $pop->setMailServer($_POST["server"]);
-  $pop->setUser($_POST["user"]);
-  $pop->setPassword($_POST["password"]);
-
-  try{
-    $pop->doConnect();
-  } catch (Exception $e) {
-    echo 'Error: ',  $e->getMessage(), "\n";
-  }
-?>
-
-<p><i>Retrieving message list from POP server...</i><p>
-
-<center>
-<table width="90%">
-  <tr>
-    <th>Index</th>
-    <th>Subject</th>
-    <th>From</th>
-    <th>Date</th>
-  </tr>
-
-<?php
   $pop->setMaxLines(20); //only headers
+	
+	$startidx = 1; // Starting index of the max 5 to display at a time
+	$input = "";
+	$doDisplay = true;
+	
+	while (true) {
+		
+    if ($doDisplay) {
+      echo "Displaying messages " . $startidx . "-" . min($startidx+4, $msgCount) . " of $msgCount\n--------------------\n";
+      
+      for ($i = $startidx; $i <= min($startidx+4, $msgCount); $i++) {
+      $pop->setMessageNumber($i);
+      $pop->doRetrieve();
 
-  for($i=1; $i<=$pop->getMessageCount();$i++){
-    $pop->setMessageNumber($i);
-    $pop->doRetrieve();
-?>
-  <tr>
-    <td nowrap><?php echo $i ?></td>
-    <td nowrap><?php echo htmlspecialchars($pop->getMessageSubject()); ?></td>
-    <td nowrap><?php echo htmlspecialchars($pop->getMessageFrom()); ?></td>
-    <td nowrap><?php echo htmlspecialchars($pop->getMessageDate()); ?></td>
-  </tr>
+      echo "Index:   $i\n";
+      echo "Subject: " . $pop->getMessageSubject() . "\n";
+      echo "From:    " . $pop->getMessageFrom() . "\n";
+      echo "Date:    " . $pop->getMessageDate() . "\n";
+      echo "--------------------\n";
+      }
+      
+      echo "Type next or back to navigate. Type quit to exit.\n";
+    }
+    
+    echo "pop> ";
+    $input = trim(fgets(STDIN));
+    
+    $doDisplay = false;
+    
+    if ($input == "next") {
+      if ($msgCount > $startidx+4) {
+        $startidx += 5;
+        $doDisplay = true;
+      } else {
+        $input = "";
+        echo "Already at end.\n";
+      }
+      
+    } else if ($input == "back") {
+      if ($startidx != 1) {
+        $startidx -= 5;
+        $doDisplay = true;
+      } else {
+        $input = "";
+        echo "Already at beginning.\n";
+      }
+      
+    } else if ($input == "quit" || $input == "exit") {
+      break;
+    }
+    
+  }
 
-<?php
-  } //for loop
-?>
-
-</table>
-</center>
-
-<p><i>Disconnected from POP server.</i>
-
-<?php
+  } catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";  
+  }
   $pop->doDisconnect();
+  echo "Disconnected from POP server.\n";
 }
 ?>
-
-<br/>
-<br/>
-<br/>
-<hr/>
-NOTE: These pages are simple demos, and by no means complete applications.  They
-are intended to illustrate the usage of the IPWorks objects in a simple,
-straightforward way.  What we are hoping to demonstrate is how simple it is to
-program with our components.  If you want to know more about them, or if you have
-questions, please visit <a href="http://www.nsoftware.com/?demopg-IPPHA" target="_blank">www.nsoftware.com</a> or
-contact our technical <a href="http://www.nsoftware.com/support/">support</a>.
-<br/>
-<br/>
-Copyright (c) 2023 /n software inc.
-<br/>
-<br/>
-</div>
-
-<div id="footer">
-<center>
-IPWorks 2022 - Copyright (c) 2023 /n software inc. - For more information, please visit our website at <a href="http://www.nsoftware.com/?demopg-IPPHA" target="_blank">www.nsoftware.com</a>.
-</center>
-</div>
-
-</body>
-</html>
-
-<?php if ($sendBuffer) ob_end_flush(); else ob_end_clean(); ?>

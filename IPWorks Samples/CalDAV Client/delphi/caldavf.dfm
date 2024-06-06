@@ -21,7 +21,7 @@ object FormCaldav: TFormCaldav
     AutoSize = False
     Caption = 
       'This demo shows how to use the CalDAV component to list upcoming' +
-      ' events from an existing Google or Yahoo calendar. You can also ' +
+      ' events from an existing Google calendar. You can also ' +
       'create a new event, delete an event, or export an event to an ic' +
       's file.'
     WordWrap = True

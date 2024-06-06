@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 JavaScript Edition - Sample Project
+ * IPWorks 2024 JavaScript Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -27,11 +27,11 @@ let rl = readline.createInterface({
 main()
 async function main() {
 
-    const webdav1 = new ipworksdav.webdav();
+    const webdav1 = new ipworks.webdav();
     let argument;            // arguments to the user's command 
     const argv = process.argv;
 
-    if (argv.length < 2) {
+    if (argv.length < 4) {
 
         console.log("usage: node webdav.js username password");
         console.log("Options");

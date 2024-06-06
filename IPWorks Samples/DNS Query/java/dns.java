@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -18,7 +18,7 @@ import ipworks.*;
 
 public class dns extends ConsoleDemo {
 	
-	private static Dns dns = null;
+	private static DNS dns = null;
 
 	public static void main(String[] args) {
 	  
@@ -32,15 +32,15 @@ public class dns extends ConsoleDemo {
 
 		} else {
 			
-			dns = new Dns();
+			dns = new DNS();
 		    try {
 		    			    	
-		    	dns.addDnsEventListener(new DefaultDnsEventListener() {
-		        public void error(DnsErrorEvent args) {
+		    	dns.addDNSEventListener(new DefaultDNSEventListener() {
+		        public void error(DNSErrorEvent args) {
 		          dns_error(args);
 		        }
 
-		        public void response(DnsResponseEvent args) {
+		        public void response(DNSResponseEvent args) {
 		          dns_response(args);
 		        }
 		      });
@@ -58,11 +58,11 @@ public class dns extends ConsoleDemo {
 		}  
 	}
 
-	static void dns_error(DnsErrorEvent args) {
+	static void dns_error(DNSErrorEvent args) {
 		System.out.println("Error: " + args.errorCode + "[" + args.description + "].");
 	}
 
-	static void dns_response(DnsResponseEvent args) {
+	static void dns_response(DNSResponseEvent args) {
 		try {
 			if (args.statusCode == 0) { //there was a record in the response
 				DNSRecordList records = dns.getRecords();
@@ -107,15 +107,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -29,14 +29,14 @@ public class httpurl {
 
 		} else {
 			
-			Http http = new Http();					
+			HTTP http = new HTTP();					
 			try {
-				http.addHttpEventListener(new DefaultHttpEventListener(){
+				http.addHTTPEventListener(new DefaultHTTPEventListener(){
 					
-					public void SSLServerAuthentication(HttpSSLServerAuthenticationEvent arg0) {
+					public void SSLServerAuthentication(HTTPSSLServerAuthenticationEvent arg0) {
 						arg0.accept = true; //this will trust all certificates and it is not recommended for production use
 					}
-					public void transfer(HttpTransferEvent e) {
+					public void transfer(HTTPTransferEvent e) {
 						System.out.print(new String(e.text));
 					}
 		        });
@@ -70,15 +70,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

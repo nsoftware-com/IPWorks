@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -29,17 +29,17 @@ public class mx extends ConsoleDemo {
 		
 		} else {
 			
-			Mx mx = new Mx();
+			MX mx = new MX();
 
 			try {
 				
-				mx.addMxEventListener(new DefaultMxEventListener() {
+				mx.addMXEventListener(new DefaultMXEventListener() {
 					
-					public void error(MxErrorEvent e) {
+					public void error(MXErrorEvent e) {
 						System.out.println("\nError " + e.errorCode + ": " + e.description);
 					}
 
-					public void response(MxResponseEvent e) {
+					public void response(MXResponseEvent e) {
 						if (e.statusCode != 0)
 							System.out.println(e.description);
 						else
@@ -80,15 +80,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

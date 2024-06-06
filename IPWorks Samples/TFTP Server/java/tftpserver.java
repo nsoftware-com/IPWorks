@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -21,7 +21,7 @@ import ipworks.*;
 
 public class tftpserver extends ConsoleDemo {
 
-    private static Tftpserver tftpserver1 = null;
+    private static TFTPServer tftpserver1 = null;
 	
 	public static void main(String[] args) {
 
@@ -35,38 +35,38 @@ public class tftpserver extends ConsoleDemo {
             System.out.println("\r\nExample: tftpserver C:\\temp");
         } else {
             try {
-                tftpserver1 = new Tftpserver();
-                tftpserver1.addTftpserverEventListener(new DefaultTftpserverEventListener() {
-                    public void connected(TftpserverConnectedEvent e) {
+                tftpserver1 = new TFTPServer();
+                tftpserver1.addTFTPServerEventListener(new DefaultTFTPServerEventListener() {
+                    public void connected(TFTPServerConnectedEvent e) {
                         System.out.println(tftpserver1.getConnections().item(e.connectionId).getRemoteHost() + " connected.");
                     }
 
                     @Override
-                    public void connectionRequest(TftpserverConnectionRequestEvent e) {
+                    public void connectionRequest(TFTPServerConnectionRequestEvent e) {
                         System.out.println(e.remoteHost + ": Attempting to connect.");
                     }
 
-                    public void disconnected(TftpserverDisconnectedEvent e) {
+                    public void disconnected(TFTPServerDisconnectedEvent e) {
                         System.out.println("Remote host disconnected: " + e.description);
                     }
 
                     @Override
-                    public void endTransfer(TftpserverEndTransferEvent e) {
+                    public void endTransfer(TFTPServerEndTransferEvent e) {
                         System.out.println("Transfer complete");
                     }
 
                     @Override
-                    public void error(TftpserverErrorEvent e) {
+                    public void error(TFTPServerErrorEvent e) {
                         System.out.println("Error: " + e.description + " [" + e.errorCode + "]");
                     }
 
                     @Override
-                    public void startTransfer(TftpserverStartTransferEvent tftpserverStartTransferEvent) {
+                    public void startTransfer(TFTPServerStartTransferEvent tftpserverStartTransferEvent) {
                         System.out.println("Transfer started");
                     }
 
                     @Override
-                    public void transfer(TftpserverTransferEvent tftpserverTransferEvent) {
+                    public void transfer(TFTPServerTransferEvent tftpserverTransferEvent) {
                         System.out.println("Transferring data");
                     }
                 });
@@ -118,15 +118,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

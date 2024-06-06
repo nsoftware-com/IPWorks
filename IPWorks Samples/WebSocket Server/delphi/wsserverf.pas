@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -39,12 +39,12 @@ type
     procedure WSServer1Disconnected(Sender: TObject; ConnectionId,
       StatusCode: Integer; const Description: string);
     procedure FormCreate(Sender: TObject);
-    procedure WSServer1DataIn(Sender: TObject; ConnectionId,
-      DataFormat: Integer; Text: string; TextB: TArray<System.Byte>;
-      EOM: Boolean; EOL: Boolean);
+    procedure WSServer1DataIn(Sender: TObject; const ConnectionId,
+      DataFormat: Integer; const Text: string; const TextB: TArray<System.Byte>;
+      const EOM, EOL: Boolean);
     procedure WSServer1SSLClientAuthentication(Sender: TObject;
-      ConnectionId: Integer; CertEncoded: string;
-      CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer,
+      const ConnectionId: Integer; const CertEncoded: string;
+      const CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer,
       Status: string; var Accept: Boolean);
   private
     { Private declarations }
@@ -86,7 +86,7 @@ begin
           ipwWSServer1.SSLCertStore := FormWscert.ipwCertMgr1.CertStore;
           ipwWSServer1.LocalPort := StrToInt(txtPort.Text);
           ipwWSServer1.UseSSL := True;
-          ipwWSServer1.Listening := True;
+          ipwWSServer1.StartListening();
           btnStart.Enabled := False;
           btnStop.Enabled := True;
         end;
@@ -97,7 +97,7 @@ end;
 
 procedure TFormWSServer.btnStopClick(Sender: TObject);
 begin
-  ipwWSServer1.Listening := False;
+  ipwWSServer1.StopListening();
   btnStart.Enabled := True;
   btnStop.Enabled := False;
 end;
@@ -107,18 +107,28 @@ begin
   Application.OnIdle := OnIdle;
 end;
 
+procedure TFormWSServer.WSServer1DataIn(Sender: TObject; const ConnectionId,
+  DataFormat: Integer; const Text: string; const TextB: TArray<System.Byte>;
+  const EOM, EOL: Boolean);
+begin
+    // output what was heard
+    txtLog.Lines.Add('Echoing "' + Text + '" to ' + ipwWSServer1.WSConnectionRemoteHost[ConnectionId]);
+    // and echo it back
+    ipwWSServer1.SendText(ConnectionId, Text);
+end;
+
+procedure TFormWSServer.WSServer1SSLClientAuthentication(Sender: TObject;
+  const ConnectionId: Integer; const CertEncoded: string;
+  const CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer,
+  Status: string; var Accept: Boolean);
+begin
+  Accept := True;
+end;
+
 procedure TFormWSServer.WSServer1Error(Sender: TObject; ConnectionId,
   ErrorCode: Integer; const Description: string);
 begin
   txtLog.Text := txtLog.Text + 'Error ' + IntToStr(ErrorCode) + Description;
-end;
-
-procedure TFormWSServer.WSServer1SSLClientAuthentication(
-  Sender: TObject; ConnectionId: Integer; CertEncoded: string;
-  CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer,
-  Status: string; var Accept: Boolean);
-begin
-Accept := True;
 end;
 
 procedure TFormWSServer.WSServer1Connected(Sender: TObject;
@@ -127,17 +137,7 @@ begin
     //we are connected
     txtLog.Lines.Add('Connected with ' + ipwWSServer1.WSConnectionRemoteHost[ConnectionId]);
     //send a welcome
-    ipwWSServer1.WSConnectionDataToSend[ConnectionId] := 'Connected to Echo Server!';
-end;
-
-procedure TFormWSServer.WSServer1DataIn(Sender: TObject;
-  ConnectionId, DataFormat: Integer; Text: string; TextB: TArray<System.Byte>;
-  EOM: Boolean; EOL: Boolean);
-begin
-    // output what was heard
-    txtLog.Lines.Add('Echoing "' + Text + '" to ' + ipwWSServer1.WSConnectionRemoteHost[ConnectionId]);
-    // and echo it back
-    ipwWSServer1.WSConnectionDataToSend[ConnectionId] := Text;
+    ipwWSServer1.SendText(ConnectionId, 'Connected to Echo Server!');
 end;
 
 procedure TFormWSServer.WSServer1Disconnected(Sender: TObject; ConnectionId,
@@ -147,5 +147,4 @@ begin
 end;
 
 end.
-
 

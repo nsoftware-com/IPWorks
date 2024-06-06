@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -36,10 +36,10 @@ type
     procedure ButtonStartClick(Sender: TObject);
     procedure TCPServer1Connected(Sender: TObject; ConnectionId,
       StatusCode: Integer; const Description: String);
-    procedure TCPServer1DataIn(Sender: TObject; ConnectionId: Integer;
-      Text: string; TextB: TArray<System.Byte>; EOL: Boolean);
     procedure TCPServer1Disconnected(Sender: TObject; ConnectionId,
       StatusCode: Integer; const Description: String);
+    procedure TCPServer1DataIn(Sender: TObject; ConnectionId: Integer;
+      const Text: string; const TextB: TBytes; EOL: Boolean);
   private
     { Private declarations }
   public
@@ -75,20 +75,17 @@ end;
 procedure TFormEchoserver.ButtonStartClick(Sender: TObject);
 begin
 
-
      TCPServer1.LocalPort := strtoint(EditLocalPort.Text);
 
     {If you get an "address already in use" error in the next line
     then your system --for instance Windows NT--
     has already implemented this service.}
-    TCPServer1.Listening := TRUE;
+    TCPServer1.StartListening();
 
     lTrack.Clear;
     lTrack.Items.Add('Host ' + TCPServer1.LocalHost + ' ' + inttostr(TCPServer1.LocalPort));
 
 end;
-
-
 
 procedure TFormEchoserver.TCPServer1Connected(Sender: TObject; ConnectionId,
   StatusCode: Integer; const Description: String);
@@ -99,11 +96,11 @@ begin
     TCPServer1.EOL[ConnectionID] := #10;
 end;
 
-procedure TFormEchoserver.TCPServer1DataIn(Sender: TObject; ConnectionId: Integer;
-  Text: string; TextB: TArray<System.Byte>; EOL: Boolean);
+procedure TFormEchoserver.TCPServer1DataIn(Sender: TObject;
+  ConnectionId: Integer; const Text: string; const TextB: TBytes; EOL: Boolean);
 begin
-    lTrack.Items.Add('Heard: ' + Text);
-    TCPServer1.DataToSend[ConnectionID] := Text + #10;
+  lTrack.Items.Add('Heard: ' + Text);
+  TCPServer1.SendText(ConnectionID, Text + #10);
 end;
 
 procedure TFormEchoserver.TCPServer1Disconnected(Sender: TObject; ConnectionId,
@@ -113,6 +110,3 @@ begin
 end;
 
 end.
-
-
-

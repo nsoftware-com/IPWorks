@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -17,7 +17,7 @@ import java.util.Scanner;
 import ipworks.*;
 
 public class wsclient {
-	private static Wsclient websocketclient;
+	private static WSClient websocketclient;
 	private static boolean received;
 
 	public static void main(String[] args) {
@@ -26,22 +26,22 @@ public class wsclient {
 		String command;
 		String response;
 		try {
-			websocketclient = new Wsclient();
+			websocketclient = new WSClient();
 			System.out.println("*******************************************************************************************************************");
 			System.out.println("* This is a demo to show how to connect to a remote WebSocket server, send data, and receive the echoed response.*");
 			System.out.println("******************************************************************************************************************\n");
 
-			websocketclient.addWsclientEventListener(new DefaultWsclientEventListener() {
-				public void dataIn(WsclientDataInEvent e) {
+			websocketclient.addWSClientEventListener(new DefaultWSClientEventListener() {
+				public void dataIn(WSClientDataInEvent e) {
 					System.out.println("Received: " + new String(e.text));
 					received = true;
 				}
 
-				public void connected(WsclientConnectedEvent e) {
+				public void connected(WSClientConnectedEvent e) {
 					System.out.println("Connected.");
 				}
 
-				public void disconnected(WsclientDisconnectedEvent e) {
+				public void disconnected(WSClientDisconnectedEvent e) {
 					System.out.println("Disconnected.");
 				}
 			});
@@ -61,7 +61,7 @@ public class wsclient {
 				if (command.charAt(0) == '1') {
 					received = false;
 					System.out.print("Please input sending data: ");
-					websocketclient.setDataToSend(scanner.nextLine());
+					websocketclient.sendText(scanner.nextLine());
 					while(!received){websocketclient.doEvents();}; //To ensure we get a response before asking for more input.
 				} else if (command.charAt(0) == '2')
 					break;
@@ -100,15 +100,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

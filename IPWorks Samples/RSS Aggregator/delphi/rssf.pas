@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -37,8 +37,10 @@ type
     procedure lvwItemsClick(Sender: TObject);
     procedure bRefreshClick(Sender: TObject);
     procedure lblLinkClick(Sender: TObject);
-    procedure RSS1SSLServerAuthentication(Sender: TObject; CertEncoded: string; CertEncodedB: TArray<System.Byte>;
-      const CertSubject, CertIssuer, Status: string; var Accept: Boolean);
+    procedure RSS1SSLServerAuthentication(Sender: TObject;
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
+
   private
     { Private declarations }
   public
@@ -61,9 +63,10 @@ begin
     txtData.Text := Rss1.ItemDescription[i];
 end;
 
+
 procedure TFormRss.RSS1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;

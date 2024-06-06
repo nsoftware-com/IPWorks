@@ -101,7 +101,7 @@ object FormHttpurl: TFormHttpurl
     Font.Style = []
     ParentFont = False
     TabOrder = 2
-    Text = 'c:\index.htm'
+    Text = '../../index.htm'
   end
   object tURL: TEdit
     Left = 80

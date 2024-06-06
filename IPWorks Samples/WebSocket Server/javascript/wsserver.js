@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 JavaScript Edition - Sample Project
+ * IPWorks 2024 JavaScript Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -43,7 +43,7 @@ async function main () {
 
   wsserver.setLocalHost('localhost')
 
-  wsserver.setLocalPort(await question1())
+  wsserver.setLocalPort(parseInt(await question1()))
 
   await wsserver.startListening()
   console.log('Listening... press Ctrl-C to shutdown')

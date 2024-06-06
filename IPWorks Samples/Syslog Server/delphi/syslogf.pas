@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -29,9 +29,10 @@ type
     procedure bListenClick(Sender: TObject);
     procedure bSendClick(Sender: TObject);
     procedure SysLog1PacketIn(Sender: TObject; FacilityCode: Integer;
-      const Facility: String; SeverityCode: Integer; const Severity,
-      Timestamp, Hostname, Message: String; Conforms: Boolean;
-      Packet: String; const SourceAddress: String; SourcePort: Integer);
+      const Facility: string; SeverityCode: Integer; const Severity, Timestamp,
+      Hostname, Message: string; Conforms: Boolean; const Packet: string;
+      const PacketB: TBytes; const SourceAddress: string; SourcePort: Integer);
+    
   private
     { Private declarations }
   public
@@ -49,7 +50,7 @@ procedure TFormSyslog.bListenClick(Sender: TObject);
 begin
     //bind to one address:
     Syslog1.LocalHost := Syslog1.LocalHost;
-    SysLog1.Active := true;
+    SysLog1.Activate();
 end;
 
 procedure TFormSyslog.bSendClick(Sender: TObject);
@@ -57,10 +58,12 @@ begin
     SysLog1.SendPacket(1, 5, 'Hello');
 end;
 
+
+
 procedure TFormSyslog.SysLog1PacketIn(Sender: TObject; FacilityCode: Integer;
-  const Facility: String; SeverityCode: Integer; const Severity, Timestamp,
-  Hostname, Message: String; Conforms: Boolean; Packet: String;
-  const SourceAddress: String; SourcePort: Integer);
+  const Facility: string; SeverityCode: Integer; const Severity, Timestamp,
+  Hostname, Message: string; Conforms: Boolean; const Packet: string;
+  const PacketB: TBytes; const SourceAddress: string; SourcePort: Integer);
 begin
     lvwPackets.Items.Add();
     lvwPackets.Items[lvwPackets.Items.Count-1].Caption := SourceAddress;
@@ -69,7 +72,6 @@ begin
     lvwPackets.Items[lvwPackets.Items.Count-1].SubItems.Add(Facility);
     lvwPackets.Items[lvwPackets.Items.Count-1].SubItems.Add(Severity);
     lvwPackets.Items[lvwPackets.Items.Count-1].SubItems.Add(Timestamp);
-
 end;
 
 end.

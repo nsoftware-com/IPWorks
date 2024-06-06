@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -22,7 +22,7 @@ public class syslog extends ConsoleDemo {
 
 	public static void main(String[] args) {
 		
-		Syslog syslog1 = new Syslog();
+		SysLog syslog1 = new SysLog();
 
 		Thread thread = new Thread() {
 			public void run() {
@@ -33,8 +33,8 @@ public class syslog extends ConsoleDemo {
 		thread.start();
 
 		try {
-			syslog1.addSyslogEventListener(new DefaultSyslogEventListener() {
-				public void packetIn(SyslogPacketInEvent e) {
+			syslog1.addSysLogEventListener(new DefaultSysLogEventListener() {
+				public void packetIn(SysLogPacketInEvent e) {
 					System.out.println("Host: " + e.hostname);
 					System.out.println("Facility: " + e.facility);
 					System.out.println("Severify: " + e.severity);
@@ -44,8 +44,8 @@ public class syslog extends ConsoleDemo {
 				}
 			});
       
-			syslog1.setActive(true);
-			System.out.println("Syslog server started. To stop, press any key.\n");
+			syslog1.activate();
+			System.out.println("SysLog server started. To stop, press any key.\n");
 
 			while (!stop) {
 				syslog1.doEvents();
@@ -55,7 +55,7 @@ public class syslog extends ConsoleDemo {
 		}
 
 		try {
-			syslog1.setActive(false);
+			syslog1.deactivate();
 		} catch (Exception e) {
 			displayError(e);
 			System.exit(1);
@@ -84,15 +84,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

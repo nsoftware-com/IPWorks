@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -133,7 +133,7 @@ begin
       begin
          if ShowModal = mrOK then
          begin
-            ipwFTP1.RemotePath := '';
+            ipwFTP1.ChangeRemotePath('');
             ipwFTP1.RemoteFile := '';
             ipwFTP1.RemoteHost := EditHostName.Text;
             ipwFTP1.User := EditUser.Text;
@@ -142,10 +142,10 @@ begin
             try
                ipwFTP1.Logon;
                State := OnLineConst;
-               ComboBoxRemHistory.Items.Insert(0, ipwFTP1.RemotePath);
+               ComboBoxRemHistory.Items.Insert(0, ipwFTP1.QueryRemotePath());
                ComboBoxRemHistory.ItemIndex := 0;
                UpdateRemote;
-            except on E: EipwFTP do
+            except on E: EIPWorks do
                UpdateNotes(E.Message);
             end;
          end;
@@ -155,7 +155,7 @@ begin
    begin
       try
         ipwFTP1.Logoff
-      except on E: EipwFTP do
+      except on E: EIPWorks do
          UpdateNotes(E.Message);
       end;
       State := OffLineConst;
@@ -171,7 +171,7 @@ begin
       Screen.Cursor := crAppStart;
       try
          ipwFTP1.Logoff;
-      except on E: EipwFTP do
+      except on E: EIPWorks do
          UpdateNotes(E.Message);
       end;
       Screen.Cursor := crDefault;
@@ -206,8 +206,8 @@ begin
    if Name[1] = '<' then
    begin
       Delete(Name, 1, 7); { Remove first seven characters, '<DIR>  '}
-      ipwFTP1.RemotePath := ipwFTP1.RemotePath + '/' + Name;
-      UpdateComboBox(ComboBoxRemHistory, ipwFTP1.RemotePath);
+      ipwFTP1.ChangeRemotePath(ipwFTP1.QueryRemotePath() + '/' + Name);
+      UpdateComboBox(ComboBoxRemHistory, ipwFTP1.QueryRemotePath());
       UpdateRemote;
    end else
       ButtonDownloadClick(nil);
@@ -219,12 +219,12 @@ begin
    Screen.Cursor := crAppStart;
    try
    if RadioGroupTransferMode.ItemIndex = 0 then
-      ipwFTP1.TransferMode := tmASCII
+      ipwFTP1.ChangeTransferMode(Integer(tmASCII))
    else if RadioGroupTransferMode.ItemIndex = 1 then
-      ipwFTP1.TransferMode := tmBinary
+      ipwFTP1.ChangeTransferMode(Integer(tmBinary))
    else if RadioGroupTransferMode.ItemIndex = 2 then
-      ipwFTP1.TransferMode := tmDefault;
-   except on E: EipwFTP do
+      ipwFTP1.ChangeTransferMode(Integer(tmDefault));
+   except on E: EIPWorks do
       UpdateNotes(E.Message);
    end;
    Screen.Cursor := crDefault;
@@ -348,11 +348,11 @@ begin
    begin
       Caption := 'Change Directory';
       LabelWhat.Caption := 'New directory:';
-      EditLine.Text := ipwFTP1.RemotePath;
+      EditLine.Text := ipwFTP1.QueryRemotePath();
 
       if ShowModal = mrOk then
       begin
-         ipwFTP1.RemotePath := EditLine.Text;
+         ipwFTP1.ChangeRemotePath(EditLine.Text);
          UpdateComboBox(ComboBoxRemHistory, EditLine.Text);
          UpdateRemote;
       end;
@@ -373,7 +373,7 @@ begin
          try
             ipwFTP1.MakeDirectory(EditLine.Text);
             UpdateRemote;
-         except on E: EipwFTP do
+         except on E: EIPWorks do
             UpdateNotes(E.Message);
          end;
       end;
@@ -413,7 +413,7 @@ begin
          ipwFTP1.RemoteFile := NameToRename;
          try
             ipwFTP1.RenameFile(EditLine.Text);
-         except on E: EipwFTP do
+         except on E: EIPWorks do
             UpdateNotes(E.Message);
          end;
          UpdateRemote;
@@ -455,7 +455,7 @@ begin
                ipwFTP1.RemoveDirectory(NameToDel)
             else
                ipwFTP1.DeleteFile(NameToDel);
-         except on E: EipwFTP do
+         except on E: EIPWorks do
             UpdateNotes(E.Message);
          end;
          UpdateRemote;
@@ -484,7 +484,7 @@ begin
       Screen.Cursor := crAppStart;
       try
          ipwFTP1.Download;
-      except on E: EipwFTP do
+      except on E: EIPWorks do
       begin
          UpdateNotes(E.Message);
          UpdateRemote;  // this is to test the connection
@@ -516,7 +516,7 @@ begin
       Screen.Cursor := crAppStart;
       try
          ipwFTP1.Upload;
-      except on E: EipwFTP do
+      except on E: EIPWorks do
          UpdateNotes(E.Message);
       end;
 
@@ -584,11 +584,11 @@ begin
    ipwFTP1.RemoteFile := '';
    try
       ipwFTP1.ListDirectoryLong;
-   except on E: EipwFTP do
+   except on E: EIPWorks do
    begin
       try
          ipwFTP1.Interrupt;
-      except on E: EipwFTP do
+      except on E: EIPWorks do
       end;
       State := OffLineConst;
       UpdateButtons;
@@ -637,7 +637,7 @@ begin
    Screen.Cursor := crAppStart;
    try
       ipwFTP1.Interrupt;
-   except on E: EipwFTP do
+   except on E: EIPWorks do
       UpdateNotes(E.Message);
    end;
    Screen.Cursor := crDefault;
@@ -699,7 +699,7 @@ end;
 procedure TFormFtp.ComboBoxRemHistoryChange(Sender: TObject);
 begin
    // Return to recent remote directory
-   ipwFTP1.RemotePath := ComboBoxRemHistory.Text;
+   ipwFTP1.ChangeRemotePath(ComboBoxRemHistory.Text);
    UpdateComboBox(ComboBoxRemHistory, ComboBoxRemHistory.Text);
    UpdateRemote;
 end;

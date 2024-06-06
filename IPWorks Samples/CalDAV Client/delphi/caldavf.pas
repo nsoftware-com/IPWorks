@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -48,9 +48,9 @@ type
     procedure btnDeleteEventClick(Sender: TObject);
     procedure btnExportICSClick(Sender: TObject);
     procedure ipwCalDAV1EventDetails(Sender: TObject; const ResourceURI,
-      ResponseStatus, ETag, CalendarData: string);
+      ResponseStatus, ETag, CalendarData, Summary: string);
     procedure ipwCalDAV1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
+      CertEncoded: string; CertEncodedB: TBytes; const CertSubject, CertIssuer, Status: string;
       var Accept: Boolean);
     procedure txtIDChange(Sender: TObject);
     procedure txtSecretChange(Sender: TObject);
@@ -91,7 +91,7 @@ begin
         ipwCalDAV1.UID := formattedDate + 'T' + formattedTime + 'Z';
         ipwCalDAV1.EventType := TipwcaldavEventTypes(vEvent);
         ipwCalDAV1.Authorization := ipwOAuth1.GetAuthorization();
-        ipwCalDAV1.PutCalendarEvent(txtURL.Text +'/' + ipwCalDAV1.UID + '.ics');
+        ipwCalDAV1.CreateEvent(txtURL.Text +'/' + ipwCalDAV1.UID + '.ics');
 
         //List the events.
         ListEvents();
@@ -126,7 +126,7 @@ begin
   Screen.Cursor := crHourGlass;
   try
     ipwCalDAV1.Authorization := ipwOAuth1.GetAuthorization();
-    ipwCalDAV1.DeleteCalendarEvent('https://apidata.googleusercontent.com' + lvwEventDetails.Selected.SubItems[2]);
+    ipwCalDAV1.DeleteEvent(lvwEventDetails.Selected.SubItems[2]);
     ListEvents();
   except
     on E : Exception do
@@ -155,7 +155,7 @@ begin
       Screen.Cursor := crHourGlass;
       try
         ipwCalDAV1.Authorization := ipwOAuth1.GetAuthorization();
-        ipwCalDAV1.GetCalendarEvent('https://apidata.googleusercontent.com' + lvwEventDetails.Selected.SubItems[2])
+        ipwCalDAV1.GetEvent(lvwEventDetails.Selected.SubItems[2])
       except
         on E : Exception do
         ShowMessage('Exception: '+E.Message);
@@ -191,7 +191,7 @@ begin
 end;
 
 procedure TFormCaldav.ipwCalDAV1EventDetails(Sender: TObject; const ResourceURI,
-      ResponseStatus, ETag, CalendarData: string);
+      ResponseStatus, ETag, CalendarData, Summary: string);
 var
   startDateTimeStr: string;
   year: Integer;
@@ -231,7 +231,7 @@ end;
 
 
 procedure TFormCaldav.ipwCalDAV1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
+  CertEncoded: string; CertEncodedB: TBytes; const CertSubject, CertIssuer, Status: string;
   var Accept: Boolean);
 begin
   Accept:=true;

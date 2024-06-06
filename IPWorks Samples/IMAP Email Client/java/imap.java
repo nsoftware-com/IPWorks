@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 Java Edition - Sample Project
+ * IPWorks 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -41,15 +41,15 @@ public class imap extends ConsoleDemo {
 		} else {
 
 			try {
-				Imap imap1 = new Imap();
-				imap1.addImapEventListener(new DefaultImapEventListener() {
+				IMAP imap1 = new IMAP();
+				imap1.addIMAPEventListener(new DefaultIMAPEventListener() {
 
-					public void SSLServerAuthentication(ImapSSLServerAuthenticationEvent e) {
+					public void SSLServerAuthentication(IMAPSSLServerAuthenticationEvent e) {
 						e.accept = true; // this will trust all certificates and it is not
 															// recommended for production use
 					}
 
-					public void mailboxList(ImapMailboxListEvent e) {
+					public void mailboxList(IMAPMailboxListEvent e) {
 						System.out.println(e.mailbox);
 						lines++;
 						if (lines == 22) {
@@ -63,7 +63,7 @@ public class imap extends ConsoleDemo {
 						}
 					}
 
-					public void messageInfo(ImapMessageInfoEvent e) {
+					public void messageInfo(IMAPMessageInfoEvent e) {
 						System.out.print(e.messageId + "  ");
 						System.out.print(e.subject + "  ");
 						System.out.print(e.messageDate + "  ");
@@ -80,7 +80,7 @@ public class imap extends ConsoleDemo {
 						}
 					}
 
-					public void transfer(ImapTransferEvent e) {
+					public void transfer(IMAPTransferEvent e) {
 						System.out.println(e.text);
 						lines++;
 						if (lines == 22) {
@@ -113,7 +113,7 @@ public class imap extends ConsoleDemo {
 						break;
 					case 'h':
 						if (imap1.getMessageCount() > 0) {
-							imap1.fetchMessageInfo();
+							imap1.retrieveMessageInfo();
 						} else {
 							System.out.println("No messages in this mailbox.");
 						}
@@ -131,7 +131,7 @@ public class imap extends ConsoleDemo {
 						msgnum++;
 						buffer = String.valueOf(msgnum);
 						imap1.setMessageSet(buffer);
-						imap1.fetchMessageText();
+						imap1.retrieveMessageText();
 						break;
 					case 'q':
 						imap1.disconnect();
@@ -139,7 +139,7 @@ public class imap extends ConsoleDemo {
 					case 'v':
 						msgnum = Integer.parseInt(argument[1]);
 						imap1.setMessageSet(argument[1]);
-						imap1.fetchMessageText();
+						imap1.retrieveMessageText();
 						break;
 					case '?':
 						DisplayMenu();
@@ -149,7 +149,7 @@ public class imap extends ConsoleDemo {
 						try {
 							msgnum = Integer.parseInt(command);
 							imap1.setMessageSet(command);
-							imap1.fetchMessageText();
+							imap1.retrieveMessageText();
 						} catch (NumberFormatException e) {
 							System.out.println("Bad command / Not implemented in demo.");
 						}
@@ -193,15 +193,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

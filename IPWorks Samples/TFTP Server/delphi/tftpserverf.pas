@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -11,6 +11,7 @@
  * corresponding product license agreement which outlines the authorized 
  * usage and restrictions.
  *)
+
 unit tftpserverf;
 
 interface
@@ -49,7 +50,8 @@ type
       Direction: Integer);
     procedure ipwTFTPServer1Transfer(Sender: TObject; ConnectionId,
       Direction: Integer; BytesTransferred: Int64; PercentDone: Integer;
-      Text: string; TextB: TArray<System.Byte>);
+      const Text: string; const TextB: TBytes);
+   
   private
     { Private declarations }
   public
@@ -100,12 +102,15 @@ begin
   EventLog.Items.Add(inttostr(ConnectionId) + ': Transfer initiated');
 end;
 
+
+
 procedure TFormTFTPServer.ipwTFTPServer1Transfer(Sender: TObject; ConnectionId,
   Direction: Integer; BytesTransferred: Int64; PercentDone: Integer;
-  Text: string; TextB: TArray<System.Byte>);
+  const Text: string; const TextB: TBytes);
 begin
   EventLog.Items.Add(inttostr(ConnectionId) + ': Transfer in progress.');
 end;
+
 
 procedure TFormTFTPServer.StartClick(Sender: TObject);
 begin
@@ -122,6 +127,3 @@ begin
 end;
 
 end.
-
-
-

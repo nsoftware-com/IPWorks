@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -10,10 +10,6 @@
  * This code is subject to the terms and conditions specified in the 
  * corresponding product license agreement which outlines the authorized 
  * usage and restrictions.
- *)
-(*
- * IPWorks DAV 2022 Delphi Edition - Demo Application
- * Copyright (c) 2022 /n software inc. - All rights reserved. - www.nsoftware.com
  *)
 unit webdavf;
 
@@ -43,14 +39,16 @@ type
     procedure bUploadClick(Sender: TObject);
     procedure bDownloadClick(Sender: TObject);
     procedure bGoClick(Sender: TObject);
-    procedure RemoteDirRefresh();
-    procedure LocalDirRefresh();
-    procedure Webdav1DirList(Sender: TObject; const ResourceURI,
-      DisplayName, ContentLanguage, ContentLength, ContentType,
-      LastModified: String);
-    procedure WebDAV1SSLServerAuthentication(Sender: TObject;
-      CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-      var Accept: Boolean);
+    procedure RemoteDirRefresh;
+    procedure LocalDirRefresh;
+
+    procedure Webdav1SSLServerAuthentication(Sender: TObject;
+      const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+      CertIssuer, Status: string; var Accept: Boolean);
+    procedure Webdav1DirList(Sender: TObject; const ResourceURI, DisplayName,
+      ContentLanguage: string; ContentLength: Int64; const ContentType,
+      LastModified: string);
+
   private
     { Private declarations }
   public
@@ -64,103 +62,103 @@ implementation
 
 {$R *.DFM}
 
-procedure TFormWebdav.RemoteDirRefresh();
+procedure TFormWebdav.RemoteDirRefresh;
 begin
-        lvwRemote.Items.Clear();
-        Webdav1.Depth := TipwTDepths.dpImmediateChildren;
-        Webdav1.User := tbUsername.Text;
-        Webdav1.Password := tbPassword.Text;
-        Webdav1.ListDirectory(tbURL.Text);
+  lvwRemote.Items.Clear;
+  Webdav1.Depth := TipwTDepths.dpImmediateChildren;
+  Webdav1.User := tbUsername.Text;
+  Webdav1.Password := tbPassword.Text;
+  Webdav1.ListDirectory(tbURL.Text);
 end;
 
-procedure TFormWebdav.LocalDirRefresh();
+procedure TFormWebdav.LocalDirRefresh;
 var
-   SearchRec: TSearchRec;
+  SearchRec: TSearchRec;
 begin
-   // Show updated file list for the local system
-   // we know the value of CurrentLocDirectory  here
+  // Show updated file list for the local system
+  // we know the value of CurrentLocDirectory  here
 
-   Screen.Cursor := crAppStart;
-   lvwLocal.Items.Clear();
+  Screen.Cursor := crAppStart;
+  lvwLocal.Items.Clear;
 
-   if FindFirst('*', faAnyFile, SearchRec) = 0 then
-   repeat
-      if (SearchRec.Attr and faDirectory) <> 0 then begin
-         lvwLocal.Items.Add();
-         lvwLocal.Items[lvwLocal.Items.Count-1].Caption := '<DIR>  ' + SearchRec.Name;
-         end
-      else begin
-         lvwLocal.Items.Add();
-         lvwLocal.Items[lvwLocal.Items.Count-1].Caption := SearchRec.Name;
-         lvwLocal.items[lvwLocal.Items.Count-1].SubItems.Add(IntToStr(SearchRec.Size div 1000) + ' KB');
-        end;
-   until FindNext(SearchRec) <> 0;
+  if FindFirst('*', faAnyFile, SearchRec) = 0 then
+  repeat
+    if (SearchRec.Attr and faDirectory) <> 0 then
+    begin
+      lvwLocal.Items.Add;
+      lvwLocal.Items[lvwLocal.Items.Count - 1].Caption := '<DIR>  ' + SearchRec.Name;
+    end
+    else
+    begin
+      lvwLocal.Items.Add;
+      lvwLocal.Items[lvwLocal.Items.Count - 1].Caption := SearchRec.Name;
+      lvwLocal.items[lvwLocal.Items.Count - 1].SubItems.Add(IntToStr(SearchRec.Size div 1000) + ' KB');
+    end;
+  until FindNext(SearchRec) <> 0;
 
-   FindClose(SearchRec);
-   Screen.Cursor := crDefault;
-
+  FindClose(SearchRec);
+  Screen.Cursor := crDefault;
 end;
 
 procedure TFormWebdav.lvwLocalDblClick(Sender: TObject);
 begin
-        ChDir('..');
-        LocalDirRefresh();
+  ChDir('..');
+  LocalDirRefresh;
 end;
 
 procedure TFormWebdav.bUploadClick(Sender: TObject);
-var url:string;
+var
+  url:string;
 begin
-    url := tbURL.Text;
-    //upload the file
-    Webdav1.LocalFile := GetCurrentDir + '\' + lvwLocal.Selected.Caption;
-    Webdav1.PutResource(url + '\' + lvwLocal.Selected.Caption);
-    RemoteDirRefresh();
+  url := tbURL.Text;
+  //upload the file
+  Webdav1.LocalFile := GetCurrentDir + '\' + lvwLocal.Selected.Caption;
+  Webdav1.PutResource(url + '\' + lvwLocal.Selected.Caption);
+  RemoteDirRefresh;
 end;
 
-
-
-
 procedure TFormWebdav.bDownloadClick(Sender: TObject);
-var path:String;
+var
+  path:String;
 begin
-    path := GetCurrentDir;
-    //download the file;
-    Webdav1.LocalFile := path + '\' + lvwRemote.Selected.Caption;
-    Webdav1.GetResource(tbURL.Text + lvwRemote.Selected.Caption);
-    LocalDirRefresh();
+  path := GetCurrentDir;
+  //download the file;
+  Webdav1.LocalFile := path + '\' + lvwRemote.Selected.Caption;
+  Webdav1.GetResource(tbURL.Text + lvwRemote.Selected.Caption);
+  LocalDirRefresh;
 end;
 
 procedure TFormWebdav.bGoClick(Sender: TObject);
-
 begin
-    LocalDirRefresh();
-    RemoteDirRefresh();
+  LocalDirRefresh;
+  RemoteDirRefresh;
 end;
+
+
 
 procedure TFormWebdav.Webdav1DirList(Sender: TObject; const ResourceURI,
-  DisplayName, ContentLanguage, ContentLength, ContentType,
-  LastModified: String);
-
+  DisplayName, ContentLanguage: string; ContentLength: Int64; const ContentType,
+  LastModified: string);
 begin
-  lvwRemote.Items.Add();
-  if (ResourceURI.EndsWith('/')) then begin
-    lvwRemote.Items[lvwRemote.Items.Count-1].Caption := '<DIR>  ' + DisplayName;
-    end
-  else begin
-    lvwRemote.Items[lvwRemote.Items.Count-1].Caption := DisplayName;
-    lvwRemote.Items[lvwRemote.Items.Count-1].SubItems.add(ContentLength);
+  lvwRemote.Items.Add;
+  if (ResourceURI.EndsWith('/')) then
+  begin
+    lvwRemote.Items[lvwRemote.Items.Count - 1].Caption := '<DIR>  ' + DisplayName;
+  end
+  else
+  begin
+    lvwRemote.Items[lvwRemote.Items.Count - 1].Caption := DisplayName;
+    lvwRemote.Items[lvwRemote.Items.Count - 1].SubItems.add(IntToStr(ContentLength));
   end;
-  lvwRemote.Items[lvwRemote.Items.Count-1].SubItems.add(LastModified);
+  lvwRemote.Items[lvwRemote.Items.Count - 1].SubItems.add(LastModified);
 end;
 
-procedure TFormWebdav.WebDAV1SSLServerAuthentication(Sender: TObject;
-  CertEncoded: string; CertEncodedB: TArray<System.Byte>; const CertSubject, CertIssuer, Status: string;
-  var Accept: Boolean);
+procedure TFormWebdav.Webdav1SSLServerAuthentication(Sender: TObject;
+  const CertEncoded: string; const CertEncodedB: TBytes; const CertSubject,
+  CertIssuer, Status: string; var Accept: Boolean);
 begin
   Accept:=true;
 end;
 
 end.
-
-
 

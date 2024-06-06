@@ -1,5 +1,5 @@
 (*
- * IPWorks 2022 Delphi Edition - Sample Project
+ * IPWorks 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -34,8 +34,10 @@ type
     btnSend: TButton;
     procedure btnCommand1Click(Sender: TObject);
     procedure btnSendClick(Sender: TObject);
-    procedure MCast1DataIn(Sender: TObject; Datagram: String;
-      const SourceAddress: String; SourcePort: Integer);
+    procedure MCast1DataIn(Sender: TObject; const Datagram: string;
+      const DatagramB: TBytes; const SourceAddress: string;
+      SourcePort: Integer);
+
   private
     { Private declarations }
   public
@@ -59,29 +61,27 @@ begin
         MCast1.MulticastGroup := eGroup.Text;
         MCast1.RemoteHost := eGroup.Text;
         MCast1.Activate();
-        MCast1.DataToSend := eName.Text + ': ' + 'joining discussion...';
+        MCast1.SendText(eName.Text + ': ' + 'joining discussion...');
         (Sender as TButton).Caption := '&Leave';
         eLine.SetFocus;
     end
     else begin
-        MCast1.DataToSend := eName.Text + ': ' + ' leaving...';
-        MCast1.Active := False;
+        MCast1.SendText(eName.Text + ': ' + ' leaving...');
+        MCast1.Deactivate();
         (Sender as TButton).Caption := '&Join';
     end
 end;
 
 procedure TFormMcchat.btnSendClick(Sender: TObject);
 begin
-	MCast1.DataToSend := eName.Text + ': ' + eLine.Text;
+	MCast1.SendText(eName.Text + ': ' + eLine.Text);
 end;
 
-
-procedure TFormMcchat.MCast1DataIn(Sender: TObject; Datagram: String;
-  const SourceAddress: String; SourcePort: Integer);
+procedure TFormMcchat.MCast1DataIn(Sender: TObject; const Datagram: string;
+  const DatagramB: TBytes; const SourceAddress: string; SourcePort: Integer);
 begin
 	mMessages.Lines.Add('[' + SourceAddress + '] ' + Datagram);
 	mMessages.Lines.Add('');
 end;
 
 end.
-

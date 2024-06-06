@@ -1,5 +1,5 @@
 /*
- * IPWorks 2022 JavaScript Edition - Sample Project
+ * IPWorks 2024 JavaScript Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -40,14 +40,13 @@ async function main() {
 
     let clientSecret;
 
-    if (argv.length < 2) {
+    if (argv.length < 4) {
 
-        console.log("usage: caldav [options] provider username password");
+        console.log("usage: node caldav.js [options] provider username");
         console.log("Options");
         console.log("  -i        OAuth Client ID");
         console.log("  -s        OAuth Client Secret");
         console.log("username  the username to login");
-        console.log("password  the password to login");
         console.log("\r\nExample: caldav -i \"Client ID\"  -s \"Client Secret\" google username password");
         process.exit();
     } else {
@@ -79,8 +78,10 @@ async function main() {
         oauth1.setClientSecret(clientSecret);
         oauth1.setServerAuthURL("https://accounts.google.com/o/oauth2/auth");
         oauth1.setServerTokenURL("https://oauth2.googleapis.com/token");
-        caldav1.setAuthScheme(ipworks.CaldavAuthSchemes.authOAuth);
+        caldav1.setAuthScheme(ipworks.CalDAVAuthSchemes.authOAuth);
         oauth1.setAuthorizationScope("https://www.googleapis.com/auth/calendar");
+        "Example: node oauth.js 723966830965.apps.googleusercontent.com _bYMDLuvYkJeT_99Q-vkP1rh https://accounts.google.com/o/oauth2/auth https://accounts.google.com/o/oauth2/token https://www.googleapis.com/auth/userinfo.email"
+
 
 
         console.log("******************************************************************************");
@@ -125,7 +126,7 @@ async function main() {
                                     caldav1.setAuthorization(await oauth1.getAuthorization().then((e) => {
                                         return e;
                                     }).catch((e) => console.log(e)));
-                                    await caldav1.putCalendarEvent("https://apidata.googleusercontent.com/caldav/v2/" + caldav1.getUser() + "/events/" + caldav1.getUID() + ".ics");
+                                    await caldav1.createEvent("https://apidata.googleusercontent.com/caldav/v2/" + caldav1.getUser() + "/events/" + caldav1.getUID() + ".ics");
                                     console.log("Event successfully added")
                                     rl.prompt()
                                 })
@@ -146,7 +147,7 @@ async function main() {
                     caldav1.setAuthorization(await oauth1.getAuthorization().then((e) => {
                         return e;
                     }).catch((e) => console.log(e)));
-                    await caldav1.deleteCalendarEvent("https://apidata.googleusercontent.com" + resourceURIs[index - 1]).catch(e => console.log(e))
+                    await caldav1.deleteEvent(resourceURIs[index - 1]).catch(e => console.log(e))
                     console.log("Event successfully deleted")
                     rl.prompt();
                 }) 

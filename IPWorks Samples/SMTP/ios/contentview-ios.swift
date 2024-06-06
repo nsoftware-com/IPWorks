@@ -139,13 +139,13 @@ struct ContentView: View, SMTPDelegate {
         
         switch (tlsType) {
         case 1:
-          client.sslStartMode = SmtpSSLStartModes.sslExplicit
+          client.sslStartMode = SMTPSSLStartModes.sslExplicit
           break
         case 2:
-          client.sslStartMode = SmtpSSLStartModes.sslImplicit
+          client.sslStartMode = SMTPSSLStartModes.sslImplicit
           break
         default:
-          client.sslStartMode = SmtpSSLStartModes.sslNone
+          client.sslStartMode = SMTPSSLStartModes.sslNone
           break
         }
         
