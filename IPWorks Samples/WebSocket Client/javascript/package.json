@@ -8,7 +8,7 @@
   "main": "wsclient.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworks": "^24.0.8923"
+    "ipworks": "^24.0.8935"
   },
   "scripts": {
     "wsclient": "node wsclient.js"

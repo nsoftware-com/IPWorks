@@ -19,30 +19,29 @@ require_once('../include/ipworks_const.php');
 class MyCertMgr extends IPWorks_CertMgr
 {
   function fireCertList($param) {
-    echo($param['certsubject']);
+    echo $param['certsubject'] . "\n";
+  }
+  function fireError($param) {
+    echo "Error: " . $param['description'] . "\n";
   }
 }
 
-if ($argc < 3) {
-  echo "Usage: php certificate_manager.php filename password\n\n";
+if ($argc < 2) {
+  echo "Usage: php certificate_manager.php filename [password]\n\n";
   echo "  filename: the path to the file containing certificates and optional private keys\n";
   echo "  password: the password for the certificate store file. If test file is used, set the password to \"test\"\n\n";
   echo "Example: php certificate_manager.php test.pfx test\n";
   return;
 } else {
-  $certStore = $argv[1];
-  $certPassword = $argv[2];
-}
-
-$certmgr = new MyCertMgr();
-
-try {
-  $certmgr->setCertStoreType(99); // auto
-  $certmgr->setCertStore($certStore);
-  $certmgr->setCertStorePassword($certPassword);
-  echo "Listing certificates in " . $certStore . "\n";
-  $certmgr->doListStoreCertificates();
-} catch (Exception $e) {
-  echo "Cannot open certificate store!\n" . $e->getMessage();
+  try {
+    $certmgr = new MyCertMgr();
+    $certmgr->setCertStoreType(99); // auto
+    $certmgr->setCertStore($argv[1]);
+    if ($argc > 2) { $certmgr->setCertStorePassword($argv[2]);}
+    echo "Listing certificates in " . $argv[1] . "\n";
+    $certmgr->doListStoreCertificates();
+  } catch (Exception $e) {
+    echo "Cannot open certificate store!\n" . $e->getMessage();
+  }
 }
 ?>
