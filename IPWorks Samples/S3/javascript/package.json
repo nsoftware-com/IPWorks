@@ -8,7 +8,7 @@
   "main": "s3.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworks": "^24.0.9067"
+    "ipworks": "^24.0.9153"
   },
   "scripts": {
     "s3": "node s3.js"

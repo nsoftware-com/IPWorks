@@ -8,7 +8,7 @@
   "main": "caldav.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworks": "^24.0.9067"
+    "ipworks": "^24.0.9153"
   },
   "scripts": {
     "caldav": "node caldav.js"

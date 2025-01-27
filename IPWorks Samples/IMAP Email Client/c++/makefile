@@ -32,7 +32,7 @@ src: ../../src/ipworks.o
 
 else # LINUX
 CPU=$(shell uname -m)
-# Assumed that a product is always built for Windows-x64 platform
+# It's assumed that a product is always built for Linux/x64 platform
 ifeq ($(CPU), $(filter $(CPU), i386 i686))
   LIB=lib
 endif

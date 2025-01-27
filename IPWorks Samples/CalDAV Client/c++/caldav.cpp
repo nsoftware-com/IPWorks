@@ -334,7 +334,7 @@ int main(int argc, char* argv[])
 				caldav.SetUID(caldav.GetStartDate());
 				string temp = argv[argc - 3];
 				sprintf(buffer, "https://apidata.googleusercontent.com/caldav/v2/%s/events/%s.ics", caldav.GetUser(), caldav.GetUID());
-				ret_code = caldav.CreateEventA(buffer);
+				ret_code = caldav.CreateEvent(buffer);
 				
 				if (!ret_code)
 					printf("Event Successfully Added.\n");
